@@ -89,6 +89,7 @@ From the dominant material in the Materials row:
 | glass | `cubic-bezier(.16,1,.3,1)` | fast out, long settle, nothing bounces |
 | steel | `cubic-bezier(.4,0,.2,1)` | even, machined, no character at either end |
 | paper | `cubic-bezier(.33,1,.68,1)` | light, quick, a page falling flat |
+| wood | `cubic-bezier(.3,.7,.2,1)` | heavy, slow to start, settles without a snap: a drawer on runners |
 
 The transient takes the dominant material's curve; the transport takes a sine
 (`cubic-bezier(.37,0,.63,1)`) because a room's tone breathes in and out at the same rate.

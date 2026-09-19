@@ -396,7 +396,10 @@ export function lint(text, { file = '(stdin)', register = 'product', foldKeys = 
       findings.push(`one-plate: ${rasters.size + 1} distinct rasters (${[...rasters].slice(0, 3).join(', ')}). One plate per page; supporting images are crops of ${platePath}.`);
   }
 
-  if (roleCount > 0 && roleCount < 5) findings.push(`roles: only ${roleCount} of 5 palette roles found (bg, surface, ink, accent, muted).`);
+  // A partial role set is a finding only where the global palette lives (a :root or
+  // @theme block). A scoped override of one role in a component is not a palette.
+  const declaresPalette = /(:root|@theme)[^{]*\{/.test(text);
+  if (roleCount > 0 && roleCount < 5 && declaresPalette) findings.push(`roles: only ${roleCount} of 5 palette roles found (bg, surface, ink, accent, muted).`);
 
   return { file, roleCount, oklchCount, fold, kit, sizes, register, plate: platePath, reflexEmbedded: reflexList.embedded, findings, pass: findings.length === 0 };
 }
@@ -437,7 +440,16 @@ if (invoked && (import.meta.url === `file:///${invoked.replace(/\\/g, '/')}` || 
       const input = payload.tool_input || {};
       const target = input.file_path || '';
       if (!/\.(css|scss|json|ts|js|mjs|cjs|md|html|htm|jsx|tsx)$/i.test(target)) process.exit(0);
-      let text = input.content ?? input.new_string ?? '';
+      // A Write carries the whole file. An Edit carries a snippet: lint the file as it
+      // will be after the replacement, never the snippet alone (one edited token line
+      // is not a one-role palette).
+      let text = input.content ?? '';
+      if (!text && input.new_string !== undefined) {
+        const current = target && fs.existsSync(target) ? fs.readFileSync(target, 'utf8') : '';
+        text = input.old_string && current.includes(input.old_string)
+          ? current.replace(input.old_string, input.new_string)
+          : current + '\n' + input.new_string;
+      }
       if (!text && target && fs.existsSync(target)) text = fs.readFileSync(target, 'utf8');
       const r = lint(text, { file: target, foldKeys: await loadFoldKeys(), reflex });
       if (r.roleCount === 0 || r.pass) process.exit(0);

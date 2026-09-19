@@ -132,7 +132,8 @@ const words = (s) => (s.match(/[A-Za-z0-9$'’-]+(?::\d+)?/g) || []);
 const sentences = (s) => s.split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter(Boolean);
 const median = (a) => { if (!a.length) return 0; const b = [...a].sort((x, y) => x - y); const i = b.length >> 1; return b.length % 2 ? b[i] : (b[i - 1] + b[i]) / 2; };
 
-export function lintCopy(text, { file = '(stdin)', spec = {} } = {}) {
+export function lintCopy(text, { file = '(stdin)', spec = {}, checkStates = true } = {}) {
+  const opts = { checkStates };
   const S = { ...DEFAULT_SPEC, ...spec };
   const strings = extract(text, file);
   const findings = [];
@@ -221,7 +222,7 @@ export function lintCopy(text, { file = '(stdin)', spec = {} } = {}) {
   // 8 state coverage: every state name in the spec is an element carrying data-state
   const covered = new Set(strings.map((s) => s.state).filter((s) => s && S.states.includes(s)));
   const missing = S.states.filter((s) => !covered.has(s));
-  if (missing.length) add('state-coverage', `${covered.size}/${S.states.length} states written. Missing: ${missing.join(', ')}. Mark each with data-state.`);
+  if (missing.length && opts.checkStates !== false) add('state-coverage', `${covered.size}/${S.states.length} states written. Missing: ${missing.join(', ')}. Mark each with data-state.`);
 
   // 9 label case
   if (S.labelCase === 'sentence') {
@@ -248,11 +249,15 @@ function report(r) {
 const argv = process.argv.slice(2);
 if (process.argv[1] && process.argv[1].endsWith('copy-lint.mjs')) {
   const specArg = argv.includes('--spec') ? argv[argv.indexOf('--spec') + 1] : null;
+  const hookMode = argv.includes('--hook');
   if (argv.includes('--spec') && (!specArg || !fs.existsSync(specArg))) {
+    // No voice.json yet (the project has not reached step 5b): a hook has nothing to
+    // lint against and must never block a write. The CLI form still reports usage.
+    if (hookMode) process.exit(0);
     console.error(`usage: --spec needs a voice.json that exists (got "${specArg || ''}")`); process.exit(2);
   }
   const spec = specArg ? JSON.parse(fs.readFileSync(specArg, 'utf8')) : {};
-  if (argv.includes('--hook')) {
+  if (hookMode) {
     let raw = '';
     process.stdin.on('data', (d) => (raw += d));
     process.stdin.on('end', () => {
@@ -262,7 +267,10 @@ if (process.argv[1] && process.argv[1].endsWith('copy-lint.mjs')) {
       if (!/\.(html|htm|jsx|tsx|md)$/i.test(target)) process.exit(0);
       let text = input.content ?? input.new_string ?? '';
       if (!text && target && fs.existsSync(target)) text = fs.readFileSync(target, 'utf8');
-      const r = lintCopy(text, { file: target, spec });
+      // state-coverage is a whole-document rule for markup surfaces. A markdown brief,
+      // a snippet Edit or a partial component never carries all six states.
+      const checkStates = /\.(html|htm|jsx|tsx)$/i.test(target) && /<body[\s>]/i.test(text);
+      const r = lintCopy(text, { file: target, spec, checkStates });
       if (r.strings === 0 || r.pass) process.exit(0);
       process.stdout.write(JSON.stringify({
         hookSpecificOutput: {

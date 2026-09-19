@@ -147,7 +147,9 @@ function score(f, q, reflex) {
     if (missing.length) why.push(`no ${missing.join(', ')}`);
   }
   const extra = tags.filter((t) => EXPRESSIVE[t] && t !== 'wght' && !needed.includes(t));
-  if (extra.length) { s += Math.min(16, extra.length * 8); why.push(`spare axes ${extra.join(', ')}`); }
+  // A spare axis is a small convenience, not evidence of fit: capped so a many-axis
+  // face cannot outrank a better-suited one on axis count alone.
+  if (extra.length) { s += Math.min(6, extra.length * 3); why.push(`spare axes ${extra.join(', ')}`); }
 
   if (m.want.includes(f.stroke)) { s += 14; why.push(`${f.stroke.toLowerCase()} suits ${q.method} (${m.note})`); }
   if ((CONTRAST[q.contrast] || []).includes(f.stroke)) s += 8;
@@ -195,7 +197,7 @@ function specimen(list, q, file) {
   <section>
     <p class="meta">rank ${i + 1} &middot; ${esc(f.family)} &middot; ${f.catalog} &middot; ${esc(f.stroke)} &middot; axes ${f.axes.map((a) => a.tag).join(' ') || 'none'} &middot; score ${f.score}</p>
     <div class="poster" style="font-family:'${esc(f.family)}',serif">${esc(q.string)}</div>
-    <p class="body" style="font-family:'${esc(f.family)}',serif">Nobody else is up yet. The quiet has a weight to it, and the first coffee is still too hot to drink. 0123456789</p>
+    <p class="body" style="font-family:'${esc(f.family)}',serif">${esc(q.body)} 0123456789</p>
   </section>`).join('');
   const html = `<!doctype html><meta charset="utf-8"><title>specimen ${esc(q.role)}</title>${links}
 <style>
@@ -216,6 +218,7 @@ const q = {
   need: String(arg('need', 'wght')).split(',').map((s) => s.trim()),
   limit: +arg('limit', 3),
   string: String(arg('string', 'Aa 6:40')), size: +arg('size', 112),
+  body: String(arg('body', 'Nobody else is up yet. The quiet has a weight to it, and the first coffee is still too hot to drink.')),
   bg: String(arg('bg', 'oklch(0.16 0.014 65)')), ink: String(arg('ink', 'oklch(0.95 0.012 85)')),
 };
 if (!ROLES.includes(q.role)) usage(`--role "${q.role}" is not one of ${ROLES.join(', ')}`);

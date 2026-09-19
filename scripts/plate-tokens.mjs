@@ -131,7 +131,14 @@ const BANDS = {
   dark: { bg: [0.02, 0.10], surface: [0.10, 0.25], ink: [0.90, 1.0] },
   light: { bg: [0.85, 0.95], surface: [0.72, 0.85], ink: [0.04, 0.12] },
 };
-const BAND_NOTE = {
+const BAND_NOTE_LIGHT = {
+  bg: 'the lit ground of the scene, plate luminance p85 to p95',
+  surface: 'the subject one step below the ground, plate p72 to p85',
+  ink: 'the deepest shadow in the frame, plate p04 to p12',
+  accent: 'the hottest chroma the light makes, top 1 percent',
+  muted: '62 percent of the way from bg to ink, on ink hue',
+};
+let BAND_NOTE = {
   bg: 'the room outside the lamp, plate luminance p06 to p20',
   surface: 'the lit body of the subject, plate p55 to p72',
   ink: 'the face of the light source itself, plate p98 and up',
@@ -271,7 +278,12 @@ export function sampleRoles(pngPath) {
   }
   const byL = pts.slice().sort((a, b) => a[0] - b[0]);
   const notes = [];
-  const base = rolesFrom(pts, byL, BANDS.base, notes, '');
+  // A high-key plate (median luminance at or above 0.5) is read with the light bands:
+  // bg from the bright ground, ink from the deepest shadow. The dark bands on a light
+  // plate put ink above bg and no lift can clear the floor.
+  const highKey = byL[Math.floor(byL.length / 2)][0] >= 0.5;
+  if (highKey) { notes.push('HIGH_KEY median L at or above 0.5: sampled with the light bands (bg p85 to p95, surface p72 to p85, ink p04 to p12)'); BAND_NOTE = BAND_NOTE_LIGHT; }
+  const base = rolesFrom(pts, byL, highKey ? BANDS.light : BANDS.base, notes, '');
 
   // the lamp: centroid of the top 2 percent luminance cells
   const top = byL.slice(Math.floor(byL.length * 0.98));

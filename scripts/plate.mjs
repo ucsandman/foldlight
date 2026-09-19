@@ -88,9 +88,13 @@ export function buildSVG(shot) {
   const falloff = falloffFor(lit);
   const midAlpha = Math.pow(0.35, falloff / 2.2);
 
-  const ground = oklchToHex(0.10, 0.01 * cf, hue);
-  const core = oklchToHex(0.95, 0.045 * cf, hue);
+  // A scene more than half lit is high key: the ground is bright and the darks are
+  // the shadow under the subject, so the sampler reads a light theme out of it.
+  const highKey = lit > 0.5;
+  const ground = oklchToHex(highKey ? 0.90 : 0.10, 0.01 * cf, hue);
+  const core = oklchToHex(highKey ? 0.985 : 0.95, 0.045 * cf, hue);
   const warm = oklchToHex(0.80, 0.155 * cf, hue);
+  const shade = oklchToHex(0.24, 0.02 * cf, hue);
 
   // one specular from the dominant material, on the line from the key to centre
   const ux = (W / 2 - cx), uy = (H / 2 - cy);
@@ -109,6 +113,13 @@ export function buildSVG(shot) {
     spec.push(`<rect x="${(sx - W * 0.12).toFixed(1)}" y="${sy.toFixed(1)}" width="${(W * 0.24).toFixed(1)}" height="${(W * 0.01).toFixed(1)}" fill="${warm}" opacity="0.85" filter="url(#soft)"/>`);
   }
   // wool: no specular at all
+
+  // high key: the subject's own shadow on the far side of the key, so the plate has
+  // real darks for the sampler to read ink and muted out of
+  if (highKey) {
+    const hx = W / 2 + (ux / un) * W * 0.12, hy = H * 0.66;
+    spec.push(`<ellipse cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" rx="${(W * 0.22).toFixed(1)}" ry="${(H * 0.09).toFixed(1)}" fill="${shade}" opacity="0.9" filter="url(#soft)"/>`);
+  }
 
   // the fill lights: a row of 2px points behind the key, never a visible prop
   const fills = [];

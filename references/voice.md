@@ -10,7 +10,7 @@ measured by `scripts/copy-lint.mjs`.
 |---|---|---|
 | Person and distance | Gaze | `down` second person, close ("you", "your"); `out` first person plural ("we", "our"); `up` second person imperative; `across` third person |
 | Tense | Tempo | `slow` and `drift` present continuous; `held` future; `burst` and `crisp` simple present |
-| Sentence band | Air plus Tempo | still and slow: median 5 to 9 words, ceiling 14; crowded and burst: median 3 to 6, ceiling 9; open and crisp: median 6 to 10, ceiling 16 |
+| Sentence band | Air plus Tempo | Air sets the base: still or close, median 5 to 9 words, ceiling 14; crowded, median 4 to 7, ceiling 11; open, median 6 to 10, ceiling 16. Tempo adjusts it: `burst` takes 1 off both ends of the median and 2 off the ceiling; `held` takes 1 off the ceiling; `slow`, `drift` and `crisp` leave the base. So still and slow is 5 to 9 / 14, crowded and burst is 3 to 6 / 9, open and crisp is 6 to 10 / 16 |
 | Lexicon altitude | Objects plus Materials | concrete nouns from the inventory are allowed; category nouns are banned: no "solution", "platform", "experience", "journey", "workflow" |
 | What it notices | Gaze plus Keepsake | the copy names what the gaze lands on, never the product's feature list first |
 | Volume ceiling | Sound plus Air | near silence: no exclamation marks, no imperatives in headlines, one verb per sentence, clause cap 1 |

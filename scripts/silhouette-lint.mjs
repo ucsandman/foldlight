@@ -34,6 +34,7 @@ const DET = 26;       // 8-bit range inside one cell that counts as detail
 const EDG = 14;       // 8-bit horizontal step inside one cell that counts as a vertical edge
 const ROW_MIN = 0.01;
 const NARROW_RELAX = 0.1;   // symmetry ceilings at 390: one column is narrower than a page
+const NARROW_WAIVE = new Set(['rightCol', 'vRules']);   // side columns and their rules collapse at 390
 
 /* ---------- PNG decode (depth 8, color types 0/2/3/4/6, non-interlaced) ---------- */
 function decodePng(buf) {
@@ -337,12 +338,16 @@ if (m.deadBottom >= 0.12) findings.push(`DEAD_BOTTOM: the last ${(m.deadBottom *
 
 const foldKey = arg('fold');
 let checked = 0;
+const waived = [];
 if (foldKey) {
   const f = ATLAS[foldKey];
   if (!f) { console.error(`unknown fold "${foldKey}". node fold.mjs --list`); process.exit(2); }
   for (const [metric, [op, want0]] of Object.entries(f.envelope)) {
     const got = m[metric];
     if (got === undefined) continue;
+    // One column at 390 legitimately collapses a fold's side columns and rules; the
+    // shape is judged on band ratio, rule rows and symmetry there.
+    if (relax && NARROW_WAIVE.has(metric)) { waived.push(metric); continue; }
     const want = (relax && op === '<=' && SYMMETRY_METRICS.has(metric)) ? want0 + relax : want0;
     checked++;
     if (!OPS[op](got, want)) findings.push(`ENVELOPE ${foldKey}.${metric}: ${got.toFixed(3)} fails ${op} ${want}${want === want0 ? '' : ` (relaxed +${relax} at ${viewport})`}. The page declares ${foldKey} and does not have its shape.`);
@@ -354,7 +359,7 @@ const keys = ['symmetry', 'heroSymmetry', 'axisCentered', 'heroInk', 'foldInk', 
 if (argv.includes('--json')) {
   console.log(JSON.stringify({ file, pass: !findings.length, fold: foldKey || null, viewport, foldRows, envelopeChecked: checked, metrics: m, findings }, null, 2));
 } else {
-  console.log(`${findings.length ? 'FAIL' : 'PASS'} ${file}: cells=${W}x${H} viewport=${viewport} foldRows=${foldRows} inkedRows=${m.inkedRows} ground=rgb(${ground.join(',')}) ${(groundShare * 100).toFixed(0)}% envelope=${checked} fold=${foldKey || 'none'} findings=${findings.length}`);
+  console.log(`${findings.length ? 'FAIL' : 'PASS'} ${file}: cells=${W}x${H} viewport=${viewport} foldRows=${foldRows} inkedRows=${m.inkedRows} ground=rgb(${ground.join(',')}) ${(groundShare * 100).toFixed(0)}% envelope=${checked}${waived.length ? ` waived=${waived.join(',')}` : ''} fold=${foldKey || 'none'} findings=${findings.length}`);
   console.log('  ' + keys.map((k) => `${k}=${num(m[k])}`).join(' '));
   console.log(`  SAAS_FOLD ${d.saas.length}/${d.saasN}  AWWWARDS_FOLD ${d.aww.length}/${d.awwN}`);
   for (const f of findings) console.log('  - ' + f);
