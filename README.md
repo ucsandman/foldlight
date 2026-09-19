@@ -12,7 +12,7 @@ Same moment, same product register. Left: what the v1 skill produced (a sidebar,
 |---|---|
 | ![before](demos/_before/christmas-morning-dashboard.png) | ![after](demos/christmas-morning-dashboard/fold-1440.png) |
 
-The landing page for the same moment, built through the shipped scripts and green on every check:
+The landing page for the same moment, built through the shipped scripts. It passes every linter and is still sparse; see the status note under Demos:
 
 ![landing](demos/christmas-morning-landing/fold-1440.png)
 
@@ -78,6 +78,8 @@ Six moments, each built by running the skill end to end. Every folder holds the 
 | `farmers-market-storefront` | receipt | storefront, brand, light theme | fold, tokens and copy green; seven craft findings |
 | `christmas-morning-theme` | ledger | light and dark pack | tokens green; page still in progress |
 | `first-fall-day-terminal` | field-notebook | terminal and editor theme | fold and tokens green; six craft findings; ships iTerm, Windows Terminal and VS Code theme files |
+
+**Honest status, 2026-09-19.** The pages pass the linters and are not good. Each is a headline, empty ruled rows and one control on a gradient; the landing photograph is not placed on the page. The silhouette envelope rewards rules and columns and nothing rewards content, so the builder produced shape and stopped. Treat the demos as a record of a method that has not yet produced a page worth showing. The next step for this repo is one hand-built page approved on sight, then scripts that reproduce it.
 
 The open findings are listed line by line in each demo's `MEASURED.md`. The design record for the whole rewrite, including the tournament that chose the method, is `docs/superpowers/specs/2026-09-19-sense-memory-v2-design.md`.
 
