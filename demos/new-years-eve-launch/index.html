@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cutover - schedule the exact second your release goes live</title>
+<meta name="description" content="Cutover flips traffic, DNS, or a feature flag at the exact second you schedule, synced across every region, with automatic rollback if error rate crosses your threshold." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* Sense memory: New Year's Eve, ten seconds up */
+:root {
+  --bg: oklch(0.13 0.015 255); /* night sky over the square */
+  --surface: oklch(0.185 0.016 255); /* the crowd's wool coats, packed close */
+  --ink: oklch(0.965 0.004 95); /* jumbotron digit white */
+  --accent: oklch(0.80 0.13 220); /* the ball lit from inside, white-blue crystal */
+  --muted: oklch(0.62 0.018 250); /* breath visible in the cold air */
+
+  --font-display: 'Archivo', sans-serif;
+  --font-body: 'Public Sans', sans-serif;
+
+  --radius-shell: 2px;
+  --radius-card: 3px;
+
+  --shadow-card: 0 2px 6px -1px rgba(0, 0, 0, 0.55);
+
+  --duration-fast: 150ms;
+  --duration-slow: 320ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --space-xs: 0.35rem;
+  --space-sm: 0.55rem;
+  --space-md: 0.85rem;
+  --space-lg: 1.35rem;
+  --space-xl: 2.1rem;
+  --space-2xl: 3.3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 1ms;
+    --duration-slow: 1ms;
+  }
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-shell);
+}
+
+.wrap {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding-inline: var(--space-lg);
+}
+
+/* nav: thin single line, weight hangs from the top edge */
+.nav {
+  border-bottom: 1px solid color-mix(in oklch, var(--surface) 70%, var(--ink) 8%);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-md);
+  gap: var(--space-md);
+}
+.nav-mark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  font-size: 1.05rem;
+}
+.nav-links {
+  display: flex;
+  gap: var(--space-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.nav-links a { text-decoration: none; }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  border: 1px solid color-mix(in oklch, var(--ink) 30%, transparent);
+  border-radius: var(--radius-shell);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: border-color var(--duration-fast) var(--ease-out-expo);
+}
+.nav-cta:hover { border-color: var(--accent); }
+
+/* hero: weight hung from the top third, gaze up */
+.hero {
+  padding-block: var(--space-xl) var(--space-2xl);
+  text-align: center;
+}
+.stub-meta {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 var(--space-lg);
+}
+.stub-meta span + span::before { content: "/"; margin-inline: 0.6em; }
+
+.count-digit {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.75rem, 15vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  margin: 0 0 var(--space-sm);
+  overflow-wrap: break-word;
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+.count-digit.landed { transform: scale(1.04); }
+.count-caption {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 var(--space-xl);
+}
+
+.hero p.lede {
+  max-width: 38rem;
+  margin: 0 auto var(--space-xl);
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-block;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-card);
+  text-decoration: none;
+  transition: transform var(--duration-fast) var(--ease-out-expo), background var(--duration-fast) var(--ease-out-expo);
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: var(--shadow-card);
+}
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-secondary {
+  border: 1px solid color-mix(in oklch, var(--ink) 30%, transparent);
+  color: var(--ink);
+}
+.btn-secondary:hover { border-color: var(--accent); }
+
+/* tear line: one hairline rule, never a torn graphic */
+.tear-line {
+  border: none;
+  border-top: 1px dashed color-mix(in oklch, var(--surface) 40%, var(--ink) 20%);
+  margin: 0;
+}
+
+/* explain: specific claims, tight 1.2 rhythm, cards stay sharp not soft */
+.explain {
+  padding-block: var(--space-2xl);
+}
+.explain h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.6vw, 2.1rem);
+  margin: 0 0 var(--space-sm);
+}
+.explain > .wrap > p {
+  color: var(--muted);
+  max-width: 40rem;
+  margin: 0 0 var(--space-xl);
+}
+.claims {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px;
+  background: color-mix(in oklch, var(--surface) 60%, var(--ink) 6%);
+  border: 1px solid color-mix(in oklch, var(--surface) 60%, var(--ink) 6%);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.claim {
+  background: var(--surface);
+  padding: var(--space-lg);
+  position: relative;
+}
+.claim::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent 60%);
+  opacity: 0.6;
+}
+.claim h3 {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: var(--space-sm) 0 var(--space-xs);
+}
+.claim p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.claim .num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.6rem;
+  color: var(--accent);
+}
+
+/* access: two admission-style tiers, not three identical cards */
+.access {
+  padding-block: var(--space-2xl);
+  background: var(--surface);
+  border-top: 1px solid color-mix(in oklch, var(--surface) 70%, var(--ink) 8%);
+  border-bottom: 1px solid color-mix(in oklch, var(--surface) 70%, var(--ink) 8%);
+}
+.access h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.6vw, 2.1rem);
+  margin: 0 0 var(--space-xl);
+}
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--space-lg);
+}
+.tier {
+  border: 1px solid color-mix(in oklch, var(--ink) 18%, transparent);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  background: var(--bg);
+}
+.tier-gate {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 var(--space-sm);
+}
+.tier h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.4rem;
+  margin: 0 0 var(--space-xs);
+}
+.tier .price {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--accent);
+  font-size: 1.6rem;
+  margin: 0 0 var(--space-md);
+}
+.tier ul {
+  margin: 0 0 var(--space-lg);
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.tier li { padding: 0.3rem 0; border-top: 1px solid color-mix(in oklch, var(--ink) 10%, transparent); }
+.tier li:first-child { border-top: none; }
+.tier form {
+  display: flex;
+  gap: var(--space-xs);
+}
+.tier input[type="email"] {
+  flex: 1;
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid color-mix(in oklch, var(--ink) 25%, transparent);
+  border-radius: var(--radius-shell);
+  color: var(--ink);
+  padding: 0.6rem 0.7rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+.tier input[type="email"]::placeholder { color: var(--muted); }
+
+footer {
+  padding-block: var(--space-xl);
+  border-top: 1px solid color-mix(in oklch, var(--surface) 70%, var(--ink) 8%);
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.foot-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.foot-links { display: flex; gap: var(--space-lg); list-style: none; padding: 0; margin: 0; }
+.foot-links a { text-decoration: none; }
+.foot-links a:hover { color: var(--ink); }
+
+@media (max-width: 480px) {
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .foot-row { flex-direction: column; }
+}
+
+/* Claims read as a spec sheet, not a row of identical metric cards */
+.claims { grid-template-columns: 1fr 1fr; gap: var(--space-lg) var(--space-xl); }
+.claim { display: grid; grid-template-columns: 5.5rem 1fr; column-gap: var(--space-md); border: 0; padding: 0; background: transparent; border-top: 1px solid color-mix(in oklch, var(--ink) 18%, transparent); padding-top: var(--space-md); }
+.claim .num { grid-row: 1 / span 2; font-size: 1.5rem; line-height: 1.1; }
+.claim h3 { margin: 0 0 var(--space-xs); }
+.claim p { margin: 0; }
+@media (max-width: 700px) { .claims { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <span class="nav-mark">CUTOVER</span>
+    <ul class="nav-links">
+      <li><a href="#explain">How it works</a></li>
+      <li><a href="#access">Access</a></li>
+    </ul>
+    <a class="nav-cta" href="#access">Get early access</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="stub-meta"><span>Gate 00</span><span>Scheduled release</span><span>Admit one region at a time</span></p>
+
+    <h1 class="count-digit" id="count">Cutover</h1>
+    <p class="count-caption">Every scheduled release starts exactly like this</p>
+    <p class="lede">Schedule the exact second your release goes live. Cutover flips traffic, DNS, or a feature flag at T-zero, synced across every region, and rolls back on its own if the error rate climbs.</p>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#access">Get early access</a>
+      <a class="btn btn-secondary" href="#explain">See how the cutover works</a>
+    </div>
+  </div>
+</header>
+
+<hr class="tear-line" />
+
+<section class="explain" id="explain">
+  <div class="wrap">
+    <h2>One instant, every region</h2>
+    <p>Cutover is a scheduler for the moment your release actually ships, not the moment you merge it. You pick the target and the second; Cutover's workers hold the change ready and release it everywhere at once.</p>
+    <div class="claims">
+      <div class="claim">
+        <span class="num">40ms</span>
+        <h3>Cross-region skew</h3>
+        <p>NTP-disciplined workers in each region execute the cutover within 40ms of each other, so no user sees the old and new version at once.</p>
+      </div>
+      <div class="claim">
+        <span class="num">90s</span>
+        <h3>Rollback window</h3>
+        <p>If your error rate crosses the threshold you set within the first 90 seconds, Cutover reverts the traffic split automatically, no page needed.</p>
+      </div>
+      <div class="claim">
+        <span class="num">3</span>
+        <h3>Cutover targets</h3>
+        <p>DNS weight, load balancer traffic split, or a feature flag. Same schedule, same rollback logic, whichever layer you flip.</p>
+      </div>
+      <div class="claim">
+        <span class="num">1</span>
+        <h3>Schedule per release</h3>
+        <p>One cutover, one clock. Cutover does not batch unrelated changes into the same window, so a rollback never takes back more than you shipped.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="access" id="access">
+  <div class="wrap">
+    <h2>Reserve a cutover slot</h2>
+    <div class="tiers">
+      <div class="tier">
+        <p class="tier-gate">General admission</p>
+        <h3>Waitlist</h3>
+        <p class="price">Free</p>
+        <ul>
+          <li>Joins the build queue for your region</li>
+          <li>One scheduled cutover per month at launch</li>
+          <li>Email when your account opens</li>
+        </ul>
+        <form onsubmit="return false;">
+          <label for="ga-email" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Email</label>
+          <input id="ga-email" type="email" placeholder="you@company.com" required />
+          <button class="btn btn-secondary" type="submit">Join</button>
+        </form>
+      </div>
+      <div class="tier">
+        <p class="tier-gate">Priority access</p>
+        <h3>Early cutover slot</h3>
+        <p class="price">$49 one time</p>
+        <ul>
+          <li>Skips the queue, account opens this week</li>
+          <li>Unlimited scheduled cutovers</li>
+          <li>Direct line to the team building your integration</li>
+        </ul>
+        <form onsubmit="return false;">
+          <label for="pr-email" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Email</label>
+          <input id="pr-email" type="email" placeholder="you@company.com" required />
+          <button class="btn btn-primary" type="submit">Reserve</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>CUTOVER &middot; scheduled release infrastructure</span>
+    <ul class="foot-links">
+      <li><a href="#explain">Docs</a></li>
+      <li><a href="#explain">Status</a></li>
+      <li><a href="#access">Security</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var el = document.getElementById('count');
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Default markup already reads "Cutover"; with scripts off or motion
+  // reduced, the product name is what a reader sees, immediately.
+  if (prefersReduced) return;
+
+  var n = 10;
+  el.textContent = String(n);
+  var timer = setInterval(function () {
+    n -= 1;
+    if (n > 0) {
+      el.textContent = String(n);
+    } else {
+      clearInterval(timer);
+      el.textContent = 'Cutover';
+      el.classList.add('landed');
+      setTimeout(function () { el.classList.remove('landed'); }, 320);
+    }
+  }, 1000);
+})();
+</script>
+
+</body>
+</html>

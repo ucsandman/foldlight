@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ashford and Loom Supply Co., Product Register</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+/* Sense memory: Christmas morning, first coffee */
+:root {
+  --bg: oklch(0.16 0.014 65); /* wood floor in lamp shadow */
+  --surface: oklch(0.22 0.016 65); /* mug's shadowed underside */
+  --ink: oklch(0.95 0.012 85); /* mug glaze under lamp light */
+  --accent: oklch(0.74 0.15 58); /* lamp bulb filament */
+  --muted: oklch(0.6 0.018 70); /* steam rising through the lamp light */
+
+  --font-display: 'Spectral', Georgia, serif;
+  --font-body: 'Karla', Helvetica, Arial, sans-serif;
+
+  --radius-card: 6px;
+  --radius-shell: 4px;
+
+  --shadow-card:
+    0 1px 2px oklch(0.05 0.01 65 / 0.45),
+    0 10px 26px -10px oklch(0.1 0.02 60 / 0.55);
+
+  --duration-fast: 160ms;
+  --duration-slow: 380ms;
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+
+  /* series colors for the chart, semantic, kept apart from the accent role */
+  --series-sold: oklch(0.66 0.13 235);
+  --series-restocked: oklch(0.7 0.1 190);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: 216px 1fr;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.shell::before {
+  content: '';
+  position: fixed;
+  top: -12%;
+  left: -8%;
+  width: 42vw;
+  height: 55vh;
+  background: radial-gradient(circle at top left, oklch(0.74 0.15 58 / 0.1), transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --- sidebar --- */
+.sidebar {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-right: 1px solid oklch(0.95 0.012 85 / 0.07);
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.brand small {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.nav { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-xs); }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
+  border-radius: var(--radius-shell);
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: background-color var(--duration-fast) var(--ease-out-quint), color var(--duration-fast) var(--ease-out-quint);
+}
+
+.nav-item svg { flex-shrink: 0; }
+
+.nav-item:hover {
+  background: oklch(0.74 0.15 58 / 0.08);
+  color: var(--ink);
+}
+
+.nav-item[aria-current="page"] {
+  background: oklch(0.74 0.15 58 / 0.14);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.sidebar-foot {
+  margin-top: auto;
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding: var(--space-sm);
+  border-top: 1px solid oklch(0.95 0.012 85 / 0.07);
+}
+
+/* --- content --- */
+.content {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-xl) var(--space-2xl) var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.content-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.content-head h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin: 0 0 2px;
+}
+
+.content-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* --- summary row --- */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.summary-card {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-lg);
+  overflow: hidden;
+}
+
+.summary-card--primary::after {
+  content: '';
+  position: absolute;
+  top: -22px;
+  left: 18%;
+  width: 64%;
+  height: 46px;
+  background: linear-gradient(to top, oklch(0.6 0.018 70 / 0.22), transparent);
+  filter: blur(9px);
+  animation: steam-drift 14s var(--ease-out-quint) infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes steam-drift {
+  from { transform: translateY(0) scaleY(1); }
+  to { transform: translateY(-9px) scaleY(1.1); }
+}
+
+.summary-card .label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: var(--space-xs);
+}
+
+.summary-card .value {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 600;
+}
+
+.summary-card .delta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: var(--space-xs);
+}
+
+.summary-card .delta.warn { color: var(--accent); }
+
+/* --- main grid --- */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: var(--space-md);
+  align-items: start;
+}
+
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-lg);
+}
+
+.panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  gap: var(--space-sm);
+}
+
+.panel-head h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.02rem;
+  margin: 0;
+}
+
+.panel-head .meta {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* table */
+.table-scroll { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+thead th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: var(--space-sm) var(--space-sm);
+  border-bottom: 1px solid oklch(0.95 0.012 85 / 0.1);
+}
+
+tbody td {
+  padding: var(--space-sm) var(--space-sm);
+  border-bottom: 1px solid oklch(0.95 0.012 85 / 0.06);
+  vertical-align: middle;
+}
+
+tbody tr {
+  transition: background-color var(--duration-fast) var(--ease-out-quint);
+}
+
+tbody tr:hover {
+  background: oklch(0.74 0.15 58 / 0.06);
+}
+
+tbody tr:active {
+  transition-duration: 60ms;
+}
+
+tbody tr[aria-selected="true"] {
+  background: oklch(0.74 0.15 58 / 0.12);
+}
+
+tbody tr[aria-selected="true"] td { font-weight: 500; }
+
+.sku { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+}
+
+.status::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.status.low::before { background: var(--accent); }
+.status.reorder::before { background: var(--series-sold); }
+
+/* chart */
+.chart-legend {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+.swatch { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+.side-panels { display: flex; flex-direction: column; gap: var(--space-md); }
+
+/* empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.empty-state .icon { color: var(--muted); }
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.empty-state .meta { font-size: 0.76rem; color: var(--muted); margin: 0; }
+
+/* actions */
+.actions { display: flex; justify-content: flex-end; }
+
+.btn-primary {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-card);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  transition: transform var(--duration-fast) var(--ease-out-quint), background-color var(--duration-slow) var(--ease-out-quint);
+}
+
+.btn-primary:hover {
+  background: oklch(0.79 0.14 58);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+  transition-duration: 60ms;
+}
+
+/* responsive floor: 375px */
+@media (max-width: 860px) {
+  .main-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar {
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid oklch(0.95 0.012 85 / 0.07);
+  }
+  .nav { flex-direction: row; flex-wrap: wrap; }
+  .sidebar { overflow-x: visible; }
+  .sidebar-foot { display: none; }
+  body { overflow-x: hidden; }
+  .content, .main-grid, .main-grid > *, .panel, .summary-card { min-width: 0; }
+  .content { padding: var(--space-lg) var(--space-md) var(--space-xl); }
+  .summary-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 400px) {
+  .summary-row { grid-template-columns: 1fr; }
+  .content-head { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      Ashford &amp; Loom
+      <small>Supply Co.</small>
+    </div>
+    <nav>
+      <ul class="nav">
+        <li>
+          <a class="nav-item" href="#" aria-current="page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 4v5"/></svg>
+            Register
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h13"/></svg>
+            Purchase Orders
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
+            Vendors
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M11 19V5M18 19v-6"/></svg>
+            Reports
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a7.9 7.9 0 0 0 0-3l2-1.5-2-3.4-2.4.7a7.7 7.7 0 0 0-2.6-1.5L14 2h-4l-.4 2.8a7.7 7.7 0 0 0-2.6 1.5l-2.4-.7-2 3.4L4.6 10.5a7.9 7.9 0 0 0 0 3l-2 1.5 2 3.4 2.4-.7a7.7 7.7 0 0 0 2.6 1.5L10 22h4l.4-2.8a7.7 7.7 0 0 0 2.6-1.5l2.4.7 2-3.4-2-1.5z"/></svg>
+            Settings
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-foot">Signed in as R. Ashford</div>
+  </aside>
+
+  <main class="content">
+    <div class="content-head">
+      <div>
+        <h1>Product Register</h1>
+        <p>Friday, 6:40am. Warehouse floor is quiet.</p>
+      </div>
+    </div>
+
+    <section class="summary-row" aria-label="Register summary">
+      <div class="summary-card summary-card--primary">
+        <div class="label">Units on hand</div>
+        <div class="value">12,480</div>
+        <div class="delta">across 214 active SKUs</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Open purchase orders</div>
+        <div class="value">7</div>
+        <div class="delta">3 due to arrive this week</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Below reorder point</div>
+        <div class="value">4</div>
+        <div class="delta warn">1 flagged urgent</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Inventory value</div>
+        <div class="value">$184,600</div>
+        <div class="delta">at last cost</div>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Register</h2>
+          <span class="meta">214 SKUs, sorted by category</span>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">SKU</th>
+                <th scope="col">Product</th>
+                <th scope="col">Category</th>
+                <th scope="col">On hand</th>
+                <th scope="col">Reorder at</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="sku">HG-2201</td>
+                <td>Glazed Stoneware Mug, 12oz</td>
+                <td>Kitchen</td>
+                <td>340</td>
+                <td>150</td>
+                <td><span class="status">In stock</span></td>
+              </tr>
+              <tr aria-selected="true">
+                <td class="sku">HG-1187</td>
+                <td>Merino Wool Crew Sock, Charcoal</td>
+                <td>Home Textiles</td>
+                <td>62</td>
+                <td>100</td>
+                <td><span class="status low">Low stock</span></td>
+              </tr>
+              <tr>
+                <td class="sku">HG-3390</td>
+                <td>Maple Cutting Board, 14in</td>
+                <td>Kitchen</td>
+                <td>210</td>
+                <td>80</td>
+                <td><span class="status">In stock</span></td>
+              </tr>
+              <tr>
+                <td class="sku">HG-0765</td>
+                <td>Cast Iron Trivet</td>
+                <td>Kitchen</td>
+                <td>18</td>
+                <td>40</td>
+                <td><span class="status reorder">Reorder now</span></td>
+              </tr>
+              <tr>
+                <td class="sku">HG-4410</td>
+                <td>Linen Table Runner, Natural</td>
+                <td>Home Textiles</td>
+                <td>95</td>
+                <td>60</td>
+                <td><span class="status">In stock</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="side-panels">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Weekly Unit Movement</h2>
+            <span class="meta">last 7 days</span>
+          </div>
+          <svg viewBox="0 0 400 160" width="100%" height="140" role="img" aria-label="Units sold and restocked over the last seven days">
+            <line x1="0" y1="150" x2="400" y2="150" stroke="oklch(0.6 0.018 70 / 0.3)" stroke-width="1"/>
+            <polyline points="0,128.5 66.7,139.2 133.3,117.7 200,144.6 266.7,133.9 333.3,141.9 400,125.8" fill="none" stroke="var(--series-restocked)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+            <polyline points="0,53.1 66.7,37.0 133.3,45.1 200,20.9 266.7,31.6 333.3,10.1 400,15.5" fill="none" stroke="var(--series-sold)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          <div class="chart-legend">
+            <span><i class="swatch" style="background:var(--series-sold)"></i>Units sold</span>
+            <span><i class="swatch" style="background:var(--series-restocked)"></i>Restocked</span>
+          </div>
+        </div>
+
+        <div class="panel empty-state">
+          <div class="panel-head">
+            <h2>Reorder Queue</h2>
+          </div>
+          <span class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12l4 4L19 7"/></svg>
+          </span>
+          <p>Nothing needs your attention this morning.</p>
+          <p class="meta">Register last synced 6:38am.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button class="btn-primary" type="button">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        New Purchase Order
+      </button>
+    </div>
+  </main>
+</div>
+</body>
+</html>

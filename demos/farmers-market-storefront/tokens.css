@@ -1,0 +1,45 @@
+/* Sense memory: Saturday farmers market, 9am, August */
+
+:root {
+  /* palette */
+  --bg: oklch(0.90 0 0); /* sun-bleached pavement in the market aisle */
+  --surface: oklch(0.80 0.025 70); /* weathered crate wood, lit straight by the 9am sun */
+  --ink: oklch(0.24 0.03 155); /* the chalkboard slate under the lettering */
+  --accent: oklch(0.58 0.20 32); /* a tomato pulled warm out of the crate */
+  --muted: oklch(0.58 0.025 155); /* chalk dust ghosted on a board wiped and rewritten all morning */
+
+  /* type */
+  --font-display: 'Anton', sans-serif;
+  --font-body: 'Karla', sans-serif;
+
+  /* material: wood shell, paper-bag cards */
+  --radius-shell: 6px; /* crate-corner radius */
+  --radius-card: 2px; /* a paper produce bag has almost no give */
+  --shadow-card: none; /* paper reads by its border, not a cast shadow */
+  --shadow-shell: 0 8px 20px -10px oklch(0.24 0.03 155 / 0.28); /* offset toward the sun, warm-tinted */
+
+  /* tempo: brisk market pace, 160-220ms, a flat ease-out, nothing overshoots */
+  --duration-fast: 160ms;
+  --duration-slow: 220ms;
+  --ease-brisk: cubic-bezier(0.25, 1, 0.5, 1); /* ease-out-quart */
+
+  /* air: warm, close, crowded -- tight ratio, elements allowed to touch */
+  --space-3xs: 4px;
+  --space-2xs: 6px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-slow: 0ms;
+  }
+  * {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
