@@ -275,7 +275,7 @@ if (process.argv[1] && process.argv[1].endsWith('copy-lint.mjs')) {
       process.stdout.write(JSON.stringify({
         hookSpecificOutput: {
           hookEventName: 'PreToolUse', permissionDecision: 'deny',
-          permissionDecisionReason: 'sense-memory copy lint: ' + r.findings.slice(0, 4).join(' | '),
+          permissionDecisionReason: 'foldlight copy lint: ' + r.findings.slice(0, 4).join(' | '),
           additionalContext: report(r),
         },
       }));

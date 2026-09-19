@@ -1,0 +1,20 @@
+{
+  "brand": "Ashford & Loom",
+  "person": "second",
+  "volume": "quiet",
+  "median": [5, 9],
+  "ceiling": 14,
+  "headlineWords": 8,
+  "clauseCap": 1,
+  "props": ["christmas", "tree", "gift", "star", "snowflake", "holiday", "seasonal", "mug", "coffee", "lamp", "steam", "wool", "sock"],
+  "states": ["empty", "loading", "error", "offline", "done", "first-run"],
+  "stateStrings": {
+    "empty": "Nothing is waiting on you yet.",
+    "loading": "Counting what moved in overnight.",
+    "error": "The count stopped at 5:02. Open the register and it starts again.",
+    "offline": "Nothing has arrived since 4:12. Whatever comes in will wait.",
+    "done": "That was all of it.",
+    "first-run": "The register starts keeping this page tomorrow."
+  },
+  "labelCase": "sentence"
+}

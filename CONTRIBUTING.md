@@ -21,7 +21,7 @@ node scripts/fold.mjs --gaze down --document "account book" --diagram      # fol
 node scripts/fold.mjs --gaze down --document "a vibe"; echo exit=$?        # exit=3
 node scripts/silhouette-lint.mjs references/baselines/baseline-saas.png    # FAIL, SAAS_FOLD 3/6
 node scripts/silhouette-lint.mjs references/baselines/baseline-awwwards.png # FAIL, AWWWARDS_FOLD 4/4
-node scripts/shot.mjs <moment>/sense-memory.json --out /tmp/shot.json --check   # NEVER_LEAK 0
+node scripts/shot.mjs <moment>/foldlight.json --out /tmp/shot.json --check   # NEVER_LEAK 0
 node scripts/plate.mjs /tmp/shot.json /tmp/plate.png                       # 1536x1024 provider=procedural
 node scripts/plate-tokens.mjs /tmp/plate.png /tmp/tokens.css --fold <key> --register brand
 node scripts/moment-lint.mjs /tmp/tokens.css --plate /tmp/plate.png        # PASS roles=5 fold=<key> kit=yes findings=0

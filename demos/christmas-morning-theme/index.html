@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foolscap theme pack</title>
+<meta name="description" content="Two themes for a notes app, both taken from one hour of light.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Commissioner:FLAR,VOLM,slnt,wght@0..100,0..100,-12..0,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  :root{
+    --rule: color-mix(in oklch, var(--muted) 52%, transparent);
+    --rule-v: color-mix(in oklch, var(--muted) 62%, transparent);
+    --lit-row: color-mix(in oklch, var(--accent) 10%, transparent);
+    --pitch: 44px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    position:relative;
+    min-height:100%;
+    background-color:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:17px;
+    line-height:22px;
+    font-variant-numeric:tabular-nums;
+    font-feature-settings:"tnum" 1;
+    -webkit-font-smoothing:antialiased;
+  }
+  button,input,select,textarea{font:inherit}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  /* the lamp: one fixed radial at the sampled source */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 50% at var(--source-x) var(--source-y),
+      color-mix(in oklch, var(--accent) 12%, transparent), transparent 70%);
+  }
+  /* one grain layer for the whole document */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
+    opacity:var(--grain);mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:220px 220px;
+  }
+
+  /* the ruling and the two verticals, painted once for the whole document */
+  .rules{
+    position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(to right, transparent, var(--bg)),
+      linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px),
+      linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px),
+      linear-gradient(var(--rule-v), var(--rule-v)),
+      linear-gradient(var(--rule-v), var(--rule-v));
+    background-position: 800px 0, 146px 0, 1264px 0, 146px 0, 1250px 0;
+    background-size: 280px 100%, 876px var(--pitch), 136px 22px, 1px 100%, 1px 100%;
+    background-repeat: no-repeat, repeat-y, repeat-y, no-repeat, no-repeat;
+  }
+
+  .shell{display:grid;grid-template-columns:146px minmax(0,1fr);position:relative;z-index:1}
+
+  /* the rail: thumb index tabs, hairline between each */
+  .rail{grid-column:1;padding:0}
+  .mark{height:88px;display:flex;align-items:flex-end;padding:0 0 22px 22px;
+    font-family:var(--font-display);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+  .tabs{display:flex;flex-direction:column}
+  .tabs a{display:flex;align-items:center;height:var(--pitch);padding-left:22px;
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    border-top:1px solid var(--rule);transition:color 320ms cubic-bezier(.18,.92,.14,1)}
+  .tabs a:last-child{border-bottom:1px solid var(--rule)}
+  .tabs a:hover,.tabs a:focus-visible{color:var(--ink)}
+
+  .main{grid-column:2;padding:0 40px 0 28px}
+  .row{display:grid;grid-template-columns:76px minmax(0,1fr) 200px 136px;column-gap:28px;align-items:start}
+  .c1{grid-column:1;font-size:11px;letter-spacing:.1em;color:var(--muted);line-height:22px}
+  .c2{grid-column:2}
+  .c3{grid-column:3;font-size:15px;color:var(--muted);line-height:22px}
+  .c4{grid-column:4;text-align:right;font-size:15px;line-height:22px}
+
+  /* the fold */
+  .head{padding:88px 0 0}
+  .head h1{grid-column:2;margin:0;font-family:var(--font-display);font-weight:400;
+    font-size:clamp(30px,4.6vw,64px);line-height:66px;max-width:11ch;letter-spacing:-.01em}
+  .lede{grid-column:2;margin:22px 0 0;font-size:17px;line-height:22px;max-width:44ch;color:var(--muted)}
+  .act{grid-column:4;justify-self:end;align-self:center;margin-top:22px;
+    display:inline-flex;align-items:center;height:var(--pitch);padding:0 16px;
+    background-color:var(--accent);color:var(--bg);font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:700;border-radius:6px;
+    transition:opacity 320ms cubic-bezier(.18,.92,.14,1)}
+  .act:hover{opacity:.86}
+
+  /* bands below the fold */
+  .band{padding-top:var(--pitch)}
+  .heads{padding-bottom:6px;border-bottom:1px solid var(--rule)}
+  .heads span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .heads .c4{text-align:right;font-size:11px}
+  .entry{padding-top:22px;padding-bottom:22px}
+  .total{padding-top:11px;border-top:2px solid var(--rule);margin-top:11px}
+  .total .c2{font-size:17px;line-height:22px}
+  .total .c4{font-size:17px}
+  .srow{padding-top:11px;padding-bottom:11px;border-bottom:1px solid var(--rule)}
+  .srow .c2{font-size:17px;line-height:22px}
+  .srow .c1{font-size:11px}
+  h2{margin:0 0 11px;font-family:var(--font-display);font-weight:400;font-size:24px;line-height:22px}
+
+  /* the sample: one notes app, drawn twice, once in each light */
+  .pane{background-color:var(--surface);border:1px solid var(--rule);border-radius:6px;overflow:hidden;
+    box-shadow:11.98px -.63px 18px color-mix(in oklch, #000 46%, transparent)}
+  .tool{display:flex;align-items:center;justify-content:space-between;height:var(--pitch);
+    padding:0 14px;border-bottom:1px solid var(--rule)}
+  .tool-t{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .tool-a{display:flex;align-items:center;gap:6px}
+  .ico{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;
+    background:none;border:0;color:var(--muted);cursor:pointer;
+    transition:color 320ms cubic-bezier(.18,.92,.14,1)}
+  .ico:hover{color:var(--ink)}
+  .ico svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5}
+  .new{height:var(--pitch);padding:0 14px;background:none;border:0;color:var(--ink);
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+    transition:color 320ms cubic-bezier(.18,.92,.14,1)}
+  .new:hover{color:var(--accent)}
+  .app{display:grid;grid-template-columns:268px minmax(0,1fr)}
+  .list{margin:0;padding:0;list-style:none;border-right:1px solid var(--rule)}
+  .list a{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;
+    height:var(--pitch);padding:0 14px;border-bottom:1px solid var(--rule);
+    transition:color 320ms cubic-bezier(.18,.92,.14,1)}
+  .list a:hover{color:var(--accent)}
+  .list .t{font-size:11px;color:var(--muted)}
+  .list .n{font-size:15px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .list .on{background-color:var(--lit-row);box-shadow:inset 2px 0 0 var(--accent)}
+  .note{padding:16px 22px}
+  .note h3{margin:0;font-family:var(--font-display);font-weight:400;font-size:24px;line-height:22px}
+  .note p{margin:11px 0 0;font-size:17px;line-height:22px;color:var(--muted)}
+  .note .st{margin:16px 0 0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+  @media (max-width:900px){
+    .rules{background-position:96px 0, 96px 0, 96px 0, 96px 0, 96px 0;
+      background-size:0 0, calc(100% - 112px) var(--pitch), 0 0, 1px 100%, 0 0}
+    .shell{grid-template-columns:96px minmax(0,1fr)}
+    .mark{padding-left:14px}
+    .tabs a{padding-left:14px;font-size:11px;letter-spacing:.08em}
+    .main{padding:0 16px}
+    .row{grid-template-columns:52px minmax(0,1fr);row-gap:6px}
+    .c2,.c3,.c4{grid-column:2}
+    .c4{text-align:left}
+    .head h1{max-width:none}
+    .act{justify-self:start;margin-top:22px}
+    .app{grid-template-columns:minmax(0,1fr)}
+    .list{border-right:0;border-bottom:1px solid var(--rule)}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    /* the twin: the lamp is already at full, the read row stays lit, nothing waits */
+    body::before{background:radial-gradient(ellipse 72% 60% at var(--source-x) var(--source-y),
+      color-mix(in oklch, var(--accent) 18%, transparent), transparent 76%)}
+    .list .on{background-color:color-mix(in oklch, var(--accent) 16%, transparent)}
+    .tabs a,.act,.ico,.new,.list a{transition-duration:0s}
+  }
+</style>
+</head>
+<body>
+<div class="rules" aria-hidden="true"></div>
+<div class="shell">
+  <div class="rail">
+    <div class="mark">Foolscap</div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#lights">The pack</a>
+      <a href="#lines">Both lights</a>
+      <a href="#roles">Files</a>
+    </nav>
+  </div>
+
+  <main class="main">
+    <section class="head row">
+      <h1>The page dims when the room does.</h1>
+      <p class="lede">One hour of light sets both themes. You read the same note in each.</p>
+      <a class="act" href="#lights">Open the pack</a>
+    </section>
+
+    <section class="band" id="lights">
+      <div class="row heads">
+        <span class="c1">Hour</span>
+        <span class="c2">Sample</span>
+        <span class="c3">The light</span>
+        <span class="c4">Tokens</span>
+      </div>
+
+      <div class="row entry">
+        <div class="c1">06:40</div>
+        <div class="c2">
+          <section class="pane" aria-label="Notes at 06:40">
+            <div class="tool">
+              <span class="tool-t">All notes</span>
+              <div class="tool-a">
+                <button class="ico" type="button" aria-label="Find a note"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 L14 14"/></svg></button>
+                <button class="ico" type="button" aria-label="Sort by hour"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h8M2 12h4"/></svg></button>
+                <button class="new" type="button">New note</button>
+              </div>
+            </div>
+            <div class="app">
+              <ul class="list">
+                <li><a class="on" href="#lights"><span class="t">4:12</span><span class="n">The wholesaler asks about March</span></a></li>
+                <li><a href="#lights"><span class="t">3:40</span><span class="n">Order 4417 left the shelf</span></a></li>
+                <li><a href="#lights"><span class="t">2:11</span><span class="n">Rent leaves the account on Friday</span></a></li>
+                <li><a href="#lights"><span class="t">1:05</span><span class="n">The shelf count is short by two</span></a></li>
+              </ul>
+              <article class="note">
+                <h3>The wholesaler asks about March</h3>
+                <p>You left this open at 4:12. It is still the top line.</p>
+                <p class="st" data-state="done">That was the last line.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+        <div class="c3">The page keeps its own light.</div>
+        <div class="c4">14</div>
+      </div>
+
+      <div class="row entry">
+        <div class="c1">09:12</div>
+        <div class="c2">
+          <section class="pane" data-theme="light" aria-label="Notes at 09:12">
+            <div class="tool">
+              <span class="tool-t">All notes</span>
+              <div class="tool-a">
+                <button class="ico" type="button" aria-label="Find a note in daylight"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 L14 14"/></svg></button>
+                <button class="ico" type="button" aria-label="Sort by hour in daylight"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h8M2 12h4"/></svg></button>
+                <button class="new" type="button">New note</button>
+              </div>
+            </div>
+            <div class="app">
+              <ul class="list">
+                <li><a class="on" href="#lines"><span class="t">4:12</span><span class="n">The wholesaler asks about March</span></a></li>
+                <li><a href="#lines"><span class="t">3:40</span><span class="n">Order 4417 left the shelf</span></a></li>
+                <li><a href="#lines"><span class="t">2:11</span><span class="n">Rent leaves the account on Friday</span></a></li>
+                <li><a href="#lines"><span class="t">1:05</span><span class="n">The shelf count is short by two</span></a></li>
+              </ul>
+              <article class="note">
+                <h3>The wholesaler asks about March</h3>
+                <p>You left this open at 4:12. It is still the top line.</p>
+                <p class="st" data-state="first-run">This page stays quiet until you write.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+        <div class="c3">Daylight does the work by then.</div>
+        <div class="c4">5</div>
+      </div>
+
+      <div class="row total">
+        <div class="c1">Total</div>
+        <div class="c2">Both lights come out of one hour.</div>
+        <div class="c4">19</div>
+      </div>
+    </section>
+
+    <section class="band" id="lines">
+      <h2>Six lines</h2>
+      <div class="row srow"><div class="c1">empty</div><div class="c2" data-state="empty">Nothing is written here yet.</div><div class="c4">6:40</div></div>
+      <div class="row srow"><div class="c1">loading</div><div class="c2" data-state="loading">Counting what came in overnight.</div><div class="c4">6:41</div></div>
+      <div class="row srow"><div class="c1">error</div><div class="c2" data-state="error">Nothing saved after 5:02. Open the note and it continues.</div><div class="c4">5:02</div></div>
+      <div class="row srow"><div class="c1">offline</div><div class="c2" data-state="offline">Nothing has arrived since 4:12.</div><div class="c4">4:12</div></div>
+      <div class="row srow"><div class="c1">done</div><div class="c2" data-state="done">That was the last line.</div><div class="c4">6:52</div></div>
+      <div class="row srow"><div class="c1">first-run</div><div class="c2" data-state="first-run">This page stays quiet until you write.</div><div class="c4">6:39</div></div>
+    </section>
+
+    <section class="band" id="roles">
+      <h2>Five roles</h2>
+      <div class="row srow"><div class="c1">bg</div><div class="c2">The room outside the light</div><div class="c3">oklch(0.127 0.005 53)</div><div class="c4">11.6:1</div></div>
+      <div class="row srow"><div class="c1">surface</div><div class="c2">The lit body of the thing you hold</div><div class="c3">oklch(0.243 0.034 72)</div><div class="c4">9.4:1</div></div>
+      <div class="row srow"><div class="c1">ink</div><div class="c2">The face of the light itself</div><div class="c3">oklch(0.823 0.057 75)</div><div class="c4">11.6:1</div></div>
+      <div class="row srow"><div class="c1">accent</div><div class="c2">The hottest part of the light</div><div class="c3">oklch(0.535 0.098 71)</div><div class="c4">3.8:1</div></div>
+      <div class="row srow"><div class="c1">muted</div><div class="c2">Most of the way from ground to ink</div><div class="c3">oklch(0.628 0.045 75)</div><div class="c4">5.7:1</div></div>
+      <div class="row total"><div class="c1">6:40</div><div class="c2">Nobody else is up yet.</div><div class="c4">2</div></div>
+    </section>
+
+    <div style="height:88px"></div>
+  </main>
+</div>
+</body>
+</html>

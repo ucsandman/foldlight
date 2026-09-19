@@ -1,0 +1,38 @@
+/* Foldlight: The first crisp morning, Saturday 8am, 48 degrees */
+/* fold: field-notebook */
+/* plate: assets/plate-01.png provider=procedural */
+:root {
+  --bg:          oklch(0.124 0.007 87); /* the room outside the lamp, plate luminance p06 to p20 */
+  --surface:     oklch(0.228 0.032 85); /* the lit body of the subject, plate p55 to p72 */
+  --ink:         oklch(0.781 0.065 84); /* the face of the light source itself, plate p98 and up */
+  --accent:      oklch(0.594 0.076 85); /* the hottest chroma the lamp makes, top 1 percent */
+  --muted:       oklch(0.621 0.045 84); /* 62 percent of the way from bg to ink, on ink hue */
+
+  --source-x:    96%;
+  --source-y:    45%;
+  --key-angle:   354deg; /* every shadow falls along key-angle + 180deg */
+  --falloff:     3;
+  --lit:         0.18;
+  --grain:       0.055;
+  --plate-safe:  0% 0% 75% 100%; /* type goes here, no scrim */
+
+  /* Syntax, from the objects the five roles did not take. Cursor and selection are --accent. */
+  --syn-cold:    oklch(0.695 0.062 242); /* the cold sky above the roofline, unlit */
+  --syn-steel:   oklch(0.760 0.012 250); /* the brushed steel clip on the cover */
+  --syn-board:   oklch(0.690 0.030 96);  /* the grey board cover, dry and matte */
+  --syn-shade:   oklch(0.621 0.045 84);  /* the shade the light does not reach, = muted */
+
+  /* Type. The date in ballpoint over a printed rule and a printed page number. */
+  --font-display: "Bodoni Moda", serif;   /* fonts.mjs rank=2 query=pen/wedge/opsz,wght */
+  --font-body:    "Datatype", ui-monospace, monospace; /* fonts.mjs rank=1 query=letterpress/flat/wght */
+
+  /* The field notebook's pitch: 28px baseline, margin notes offset 14px or 42px, never 0. */
+  --pitch:       28px;
+  --offset:      14px;
+  --gap:         56px;
+  --margin-col:  34%;
+
+  /* travel: 3px */
+  --transient:   160ms;
+  --curve:       cubic-bezier(.22,.61,.24,1); /* wool: muffled attack, long tail */
+}

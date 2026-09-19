@@ -1,0 +1,48 @@
+/* Foldlight: first coffee, 6:40am, house asleep */
+/* fold: ledger */
+/* plate: demos/christmas-morning-landing/assets/plate-01.png provider=procedural */
+:root {
+  --bg:          oklch(0.127 0.005 53); /* the room outside the lamp, plate luminance p06 to p20 */
+  --surface:     oklch(0.243 0.034 72); /* the lit body of the subject, plate p55 to p72 */
+  --ink:         oklch(0.823 0.057 75); /* the face of the light source itself, plate p98 and up */
+  --accent:      oklch(0.535 0.098 71); /* the hottest chroma the lamp makes, top 1 percent */
+  --muted:       oklch(0.628 0.045 75); /* 62 percent of the way from bg to ink, on ink hue */
+
+  --source-x:    5.4%;
+  --source-y:    52%;
+  --key-angle:   177deg; /* every shadow falls along key-angle + 180deg */
+  --falloff:     3;
+  --lit:         0.12;
+  --grain:       0.055;
+  --plate-safe:  46.9% 0% 53.1% 100%; /* type goes here, no scrim */
+
+  /* faces: two lines in ballpoint on a small card, queried not recalled */
+  --font-display: "Bodoni Moda", Georgia, serif; /* fonts.mjs rank=2 query=pen/wedge/opsz,wght */
+  --font-body: "Commissioner", ui-sans-serif, system-ui, sans-serif; /* fonts.mjs rank=1 query=pen/round/wght */
+
+  /* glazed ceramic: one curve, two radii, one specular */
+  --radius-press: 6px; /* the curve of the glaze, the only curve in the document */
+  --radius-focus: 9px; /* concentric with the press radius at 3px offset */
+  --ease-ceramic: cubic-bezier(0.18, 0.92, 0.14, 1); /* hard attack, dead stop, no overshoot */
+  --ease-breath: cubic-bezier(0.37, 0, 0.63, 1); /* the room's tone, in and out at one rate */
+  --specular: color-mix(in oklch, var(--ink) 14%, transparent);
+  --surface-lit: oklch(0.273 0.034 72); /* --surface plus L 0.03, the lamp side of a panel */
+
+  /* tempo slow: travel 1px, transient 90ms, transport 5.5bpm */
+  /* travel: 1px */
+  --t-transient: 90ms;
+  --t-warm: 320ms;
+  --t-settle: 440ms;
+  --loop-room: 10900ms; /* 5.5bpm, one slow breath */
+  --silence: 300ms;
+
+  /* the book: one row grid, used by every band */
+  --rule: 1px;
+  --rule-total: 2px;
+  --rail: 146px;
+  --col-time: 76px;
+  --col-note: 300px;
+  --col-amount: 168px;
+  --gap-col: 28px;
+  --edge: 64px;
+}

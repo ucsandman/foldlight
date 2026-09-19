@@ -1,0 +1,30 @@
+{
+  "name": "Fortyeight",
+  "note": "iTerm2 reads .itermcolors plists. This is the same scheme in plain JSON, keyed the way iTerm names its slots, for import scripts and for anyone building the plist by hand.",
+  "background": "#070604",
+  "foreground": "#cbb588",
+  "cursor": "#937b47",
+  "cursorText": "#070604",
+  "selection": "#231b0a",
+  "selectedText": "#cbb588",
+  "bold": "#e1d3b7",
+  "link": "#7ba2c1",
+  "ansi": {
+    "0": "#070604",
+    "1": "#9a6747",
+    "2": "#a19c87",
+    "3": "#937b47",
+    "4": "#7ba2c1",
+    "5": "#a292a6",
+    "6": "#9cb6bd",
+    "7": "#cbb588",
+    "8": "#3d372c",
+    "9": "#ba8464",
+    "10": "#b6b19c",
+    "11": "#b59b64",
+    "12": "#96b9d5",
+    "13": "#b8a7bc",
+    "14": "#b1c9cf",
+    "15": "#e1d3b7"
+  }
+}

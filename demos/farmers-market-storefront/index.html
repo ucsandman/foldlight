@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wellsfield at Ninth and Wells</title>
+<meta name="description" content="This Saturday's prices, set at 8:40.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pathway+Extreme:opsz,wdth,wght@8..144,75..100,100..900&display=swap">
+<link rel="stylesheet" href="tokens.css">
+<style>
+@property --row-color { syntax: "<color>"; inherits: false; initial-value: transparent; }
+@property --d { syntax: "<integer>"; inherits: false; initial-value: 0; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  margin: 0;
+  font-size: var(--step-0);
+  line-height: 1.5;
+  font-variation-settings: "wdth" 88;
+}
+button, input, select, textarea { font: inherit; }
+
+/* the one lamp: the 9am sun at --source-x/--source-y, and one hard band of shade */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at var(--source-x) var(--source-y),
+      color-mix(in oklch, var(--accent) 12%, transparent), transparent 70%),
+    linear-gradient(144deg,
+      transparent 0 44%,
+      color-mix(in oklch, var(--ink) 7%, transparent) 44% 57%,
+      transparent 57% 100%);
+}
+/* one grain field for the whole document; --grain is 0 on an 85 percent lit frame */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--grain);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
+/* the roll: min(44ch, 54vw), hard left, the counter around it left alone */
+.roll {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+  margin: 0 0 0 12vw;
+  width: min(44ch, 54vw);
+  padding: 0 26px;
+  border-left: 1px solid var(--edge);
+  border-right: 1px solid var(--edge);
+  box-shadow:
+    inset 0 1px 0 var(--specular),
+    9.4px 12.9px 24px color-mix(in oklch, var(--ink) 9%, transparent);
+}
+/* the lit panel: brighter where the light lands, never a float on a shadow */
+.roll::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at var(--source-x) var(--source-y),
+    var(--surface-lit) 0%, var(--surface) 62%);
+}
+
+/* the bill, then blank tape, then the tear line at the foot of the first screen */
+.bill-block {
+  min-height: calc(100vh - 12px);
+  border-bottom: 1px dotted var(--rule);
+}
+
+.meta {
+  margin: 0;
+  padding-top: 80px;
+  padding-bottom: 26px;
+  font-size: var(--step--1);
+  line-height: 1.9;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 0;
+  padding-bottom: 28px;
+  font-size: var(--step-0);
+  font-weight: 700;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+/* every line of the roll: name, leader, the price it was, the price it is */
+.bill, .rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.bill li, .rows li {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  background: var(--row-color);
+  transition: --row-color 160ms var(--curve-transient);
+}
+.bill li::before, .rows li::before {
+  content: attr(data-amt);
+  order: 2;
+  font-variant-numeric: tabular-nums;
+}
+.bill li[data-was]::after {
+  content: attr(data-was);
+  order: 1;
+  text-decoration: line-through;
+  color: var(--muted);
+}
+/* the leader is the ruling, and a ruling is light: it dims down the roll and away from the lamp */
+.leader {
+  flex: 1 1 auto;
+  align-self: flex-end;
+  height: 0.55em;
+  border-bottom: 1px dotted var(--rule);
+  mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.35) 100%);
+}
+.bill li:nth-child(1) .leader { opacity: 0.30; }
+.bill li:nth-child(2) .leader { opacity: 0.27; }
+.bill li:nth-child(3) .leader { opacity: 0.25; }
+.bill li:nth-child(4) .leader { opacity: 0.23; }
+.rows li:nth-child(1) .leader { opacity: 0.22; }
+.rows li:nth-child(2) .leader { opacity: 0.21; }
+.rows li:nth-child(3) .leader { opacity: 0.20; }
+.rows li:nth-child(4) .leader { opacity: 0.19; }
+.rows li:nth-child(5) .leader { opacity: 0.18; }
+.rows li:nth-child(6) .leader { opacity: 0.16; }
+
+/* one rule above the subtotal, and a second under it: the double rule over the total */
+.sum {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 44px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid var(--edge);
+  border-bottom: 1px solid var(--edge);
+  counter-reset: d var(--d);
+  animation: tally 320ms var(--curve-transport) both;
+}
+.sum::after {
+  content: "$" counter(d) ".00";
+  margin-left: auto;
+}
+@keyframes tally { from { --d: 0; } to { --d: 43; } }
+
+/* the total is the primary action, and it is the only thing at scale */
+.total {
+  display: block;
+  margin-top: 3px;
+  padding-top: 10px;
+  padding-bottom: 26px;
+  border-top: 1px solid var(--edge);
+  border-bottom: 3px solid var(--accent);
+  font-size: var(--step-3);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-align: right;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--surface-lit);
+  transition: --row-color 160ms var(--curve-transient);
+}
+.total::before {
+  content: attr(data-label);
+  display: block;
+  padding-bottom: 6px;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--muted);
+}
+.total:hover, .total:focus-visible { background: var(--surface); }
+
+/* the roll keeps printing under the fold */
+.cont { padding-top: 44px; padding-bottom: 10px; }
+h2 {
+  margin: 0;
+  padding-bottom: 10px;
+  font-size: var(--step-1);
+  font-weight: 700;
+  line-height: 1.25;
+  text-wrap: pretty;
+}
+.cont p {
+  margin: 0;
+  padding-bottom: 10px;
+  text-wrap: pretty;
+}
+.rows li::before { color: var(--muted); font-size: var(--step--1); }
+
+/* the tear-off edge at the foot carries the links */
+.tear {
+  margin-top: 26px;
+  padding-top: 16px;
+  padding-bottom: 26px;
+  border-top: 1px dotted var(--rule);
+}
+.tear a {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  min-height: 44px;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--row-color);
+  transition: --row-color 160ms var(--curve-transient);
+}
+.tear a::after {
+  content: attr(data-amt);
+  float: right;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.tear a:hover, .tear a:focus-visible { --row-color: color-mix(in oklch, var(--accent) 14%, transparent); }
+.bill li:hover, .rows li:hover { --row-color: color-mix(in oklch, var(--accent) 10%, transparent); }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (max-width: 500px) {
+  .roll { margin-left: 6vw; width: 56vw; padding: 0 14px; }
+  body { font-size: 0.8125rem; }
+  .meta { letter-spacing: 0.08em; }
+}
+
+/* the twin: the roll is already printed, the subtotal is at its value, nothing counts */
+@media (prefers-reduced-motion: reduce) {
+  .sum { --d: 43; animation-name: none; animation-duration: 0s; }
+  .bill li, .rows li, .total, .tear a { transition-duration: 0s; }
+  .total { background: var(--surface-lit); }
+  .leader { opacity: 0.24; }
+}
+</style>
+</head>
+<body>
+<main class="roll">
+
+  <div class="bill-block">
+    <p class="meta">Wellsfield at Ninth and Wells. <br> Saturday 9:00 to 1:00. <br> Roll 34, priced at 8:40.</p>
+    <h1>Every price shows what it was.</h1>
+    <ul class="bill">
+      <li data-amt="14.00" data-was="15.50">Stone fruit, one flat<i class="leader"></i></li>
+      <li data-amt="9.75">Sweet corn, one dozen<i class="leader"></i></li>
+      <li data-amt="12.25">Eggs and goat cheese<i class="leader"></i></li>
+      <li data-amt="7.00" data-was="8.50">Cut flowers, one bunch<i class="leader"></i></li>
+    </ul>
+    <div class="sum">Subtotal</div>
+    <a class="total" href="#standing" data-label="Reserve the standing order"
+       aria-label="Reserve the standing order, 38 dollars and 70 cents">$38.70</a>
+  </div>
+
+  <section class="cont" id="stalls">
+    <h2>Twelve stalls set up by nine.</h2>
+    <p>Each grower sets the price at the stall. Nothing is priced from an office.</p>
+    <ul class="rows">
+      <li data-amt="7:40">Stone fruit, row three<i class="leader"></i></li>
+      <li data-amt="7:55">Sweet corn, row three<i class="leader"></i></li>
+      <li data-amt="8:10">Eggs, row one<i class="leader"></i></li>
+      <li data-amt="8:10">Goat cheese, row one<i class="leader"></i></li>
+      <li data-amt="8:25">Rye and sourdough<i class="leader"></i></li>
+      <li data-amt="8:40">Cut flowers, row two<i class="leader"></i></li>
+    </ul>
+  </section>
+
+  <section class="cont" id="standing">
+    <h2>The standing order holds every Saturday.</h2>
+    <p>A standing order takes one tenth off the roll. It is packed by nine. It waits under the scale until one.</p>
+    <p>Nothing is charged before pickup. A line that sold out is struck. The price comes off.</p>
+  </section>
+
+  <section class="cont" id="line">
+    <h2>The count runs all morning.</h2>
+    <ul class="rows">
+      <li data-state="first-run" data-amt="6:10">Nothing is priced until Saturday.<i class="leader"></i></li>
+      <li data-state="empty" data-amt="8:00">The first stall opens at nine.<i class="leader"></i></li>
+      <li data-state="loading" data-amt="9:02">The count is coming in.<i class="leader"></i></li>
+      <li data-state="error" data-amt="9:14">The count stopped at 9:14. One tap starts it again.<i class="leader"></i></li>
+      <li data-state="offline" data-amt="11:30">Nothing arrives until the signal returns.<i class="leader"></i></li>
+      <li data-state="done" data-amt="13:00">Everything on the roll is counted.<i class="leader"></i></li>
+    </ul>
+  </section>
+
+  <footer class="cont" id="visit">
+    <h2>The market opens every Saturday.</h2>
+    <p>Ninth and Wells at the west end. Parking sits on Tenth.</p>
+    <nav class="tear">
+      <a href="#stalls" data-amt="12">Stall list</a>
+      <a href="#standing" data-amt="0.90">Standing order</a>
+      <a href="#line" data-amt="9:00">This morning</a>
+      <a href="#visit" data-amt="Tenth">Market office</a>
+    </nav>
+  </footer>
+
+</main>
+</body>
+</html>

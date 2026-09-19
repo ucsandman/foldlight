@@ -1,0 +1,24 @@
+{
+  "brand": "Fortyeight",
+  "person": "first-plural",
+  "volume": "quiet",
+  "median": [6, 10],
+  "ceiling": 16,
+  "headlineWords": 8,
+  "clauseCap": 1,
+  "props": [
+    "leaf", "leaves", "pumpkin", "gourd", "harvest", "scarf", "plaid", "blanket", "boots",
+    "fall", "autumn", "october", "season", "seasonal", "sun", "sweatshirt", "fleece", "cuff", "sleeve",
+    "coffee", "steam", "notebook", "pen", "sidewalk", "concrete", "roofline", "sunlight"
+  ],
+  "states": ["empty", "loading", "error", "offline", "done", "first-run"],
+  "stateStrings": {
+    "empty": "Nothing is open in this pane yet.",
+    "loading": "The buffer is on its way.",
+    "error": "The theme file stops at line 41 and we read it again from there.",
+    "offline": "We work from the copy on this machine.",
+    "done": "Every pane carries the same five colours now.",
+    "first-run": "One line is lit and the rest sits in shade."
+  },
+  "labelCase": "sentence"
+}

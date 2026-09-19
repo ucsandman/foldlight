@@ -1,21 +1,21 @@
 ---
-name: sense-memory
-description: Turn a remembered moment into a design identity, then carry it into the actual UI. The user describes a feeling, a scene, or a moment in time ("Christmas morning with coffee before anyone is up", "New Year's Eve when the ball drops", "the first crisp day of fall, jeans and a sweatshirt weather") and this skill extracts its light, palette, materials, tempo, composition, and one signature into OKLCH tokens, a written brief, and a rendered preview that a website, dashboard, app theme, slide deck, or terminal theme is then built from. Use whenever a user wants a site, dashboard, theme, or component to "feel like" a moment, season, place, ritual, or emotion; says their AI-built UI "looks like every other AI site" and wants an identity instead of a template; asks for design inspiration from a memory or a mood; or invokes /sense-memory. Runs before frontend-design, impeccable, or de-vibe and produces the brief those skills build from.
+name: foldlight
+description: Turn a remembered moment into a design identity, then carry it into the actual UI. The user describes a feeling, a scene, or a moment in time ("Christmas morning with coffee before anyone is up", "New Year's Eve when the ball drops", "the first crisp day of fall, jeans and a sweatshirt weather") and this skill extracts its light, palette, materials, tempo, composition, and one signature into OKLCH tokens, a written brief, and a rendered preview that a website, dashboard, app theme, slide deck, or terminal theme is then built from. Use whenever a user wants a site, dashboard, theme, or component to "feel like" a moment, season, place, ritual, or emotion; says their AI-built UI "looks like every other AI site" and wants an identity instead of a template; asks for design inspiration from a memory or a mood; or invokes /foldlight. Runs before frontend-design, impeccable, or de-vibe and produces the brief those skills build from.
 argument-hint: "[the moment, in your own words] [for: landing | dashboard | theme | terminal]"
 allowed-tools:
-  - Bash(node *sense-memory/scripts/*)
+  - Bash(node *foldlight/scripts/*)
   - Bash(npx --yes playwright screenshot *)
 hooks:
   PreToolUse:
     - matcher: "Write|Edit"
       hooks:
         - type: command
-          command: node "$HOME/.claude/skills/sense-memory/scripts/moment-lint.mjs" --hook
+          command: node "$HOME/.claude/skills/foldlight/scripts/moment-lint.mjs" --hook
         - type: command
-          command: node "$HOME/.claude/skills/sense-memory/scripts/copy-lint.mjs" --hook --spec docs/voice.json
+          command: node "$HOME/.claude/skills/foldlight/scripts/copy-lint.mjs" --hook --spec docs/voice.json
 ---
 
-# Sense Memory
+# Foldlight
 
 Rule zero: **carry the light and the feeling, never the props.** Christmas morning is not red, green, and snowflakes. It is low winter sun through one window, the glaze on a ceramic mug, wool, unhurried time, and a house that is still asleep. A stranger should feel the moment and be unable to name it.
 
@@ -31,7 +31,7 @@ node "${CLAUDE_SKILL_DIR}/scripts/context.mjs"
 
 Labels: `MOMENT_EXISTS` means a brief is already persisted (extend it, never replace it without asking); `TOKENS` names the file and format to write into; `REGISTER_HINT` is a guess to confirm; `FONTS` are commitments to keep unless the user is replacing the identity; `FOLD` is the fold key already declared in a token surface (one product keeps one fold, so reuse it); `PLATE` is the plate already made for this project (one plate per moment, forever).
 
-If the shell is unavailable or denied, do not stop and do not ask for permission: Glob for `docs/DESIGN.md`, `docs/sense-memory.json`, `PRODUCT.md`, and any `tokens.css`, `globals.css`, `tailwind.config.*`, read what exists, and continue the workflow with those answers. The workflow below never depends on the shell; the scripts make it faster and stricter, not possible.
+If the shell is unavailable or denied, do not stop and do not ask for permission: Glob for `docs/DESIGN.md`, `docs/foldlight.json`, `PRODUCT.md`, and any `tokens.css`, `globals.css`, `tailwind.config.*`, read what exists, and continue the workflow with those answers. The workflow below never depends on the shell; the scripts make it faster and stricter, not possible.
 
 ## Workflow
 
@@ -68,7 +68,7 @@ If the prompt has no moment, ask one question and stop: "What's a specific momen
 
 A Never item that emits or reflects light goes into `light.fill` as a description of its light with its name removed: the tree bulbs become "a line of very small warm bulbs low on a shelf far behind the camera, 2200K, faint". The prop leaves the frame; its light stays.
 
-Write `docs/sense-memory.json` now. It is the machine input the scripts read, not the brief. Exact keys: `title`, `moment`, `register`, `surface`, `inventory` (`light` with the five fields, `objects`, `materials`, `air`, `tempo`, `sound`, `gaze`, `text`, `document`, `gesture`, `keepsake`, `utterance`) and `never`.
+Write `docs/foldlight.json` now. It is the machine input the scripts read, not the brief. Exact keys: `title`, `moment`, `register`, `surface`, `inventory` (`light` with the five fields, `objects`, `materials`, `air`, `tempo`, `sound`, `gaze`, `text`, `document`, `gesture`, `keepsake`, `utterance`) and `never`.
 
 **Gate 2:** twelve rows in the response, none blank; the Light row shows all five fields and `litFraction` is a number; every `never` item that emits light appears in `fill`; the JSON file exists.
 
@@ -101,7 +101,7 @@ Diagram legend: `#` display type, `=` body text, `|` continuous vertical rule, `
 4a. Compile the shot record. Pure lookup, no prose:
 
 ```
-node "${CLAUDE_SKILL_DIR}/scripts/shot.mjs" docs/sense-memory.json --out docs/shot.json --check
+node "${CLAUDE_SKILL_DIR}/scripts/shot.mjs" docs/foldlight.json --out docs/shot.json --check
 ```
 
 It prints `PROMPT`, `NEGATIVE`, `CAMERA`, `SAFE SIDE` and then `NEVER_LEAK 0 (never-tokens=9 scanned=257 prompt words)`. Any Never token in the positive prompt exits 1.
@@ -123,7 +123,7 @@ node "${CLAUDE_SKILL_DIR}/scripts/plate-tokens.mjs" assets/plate-01.png styles/t
 node "${CLAUDE_SKILL_DIR}/scripts/moment-lint.mjs" styles/tokens.css --plate assets/plate-01.png --register <brand|product>
 ```
 
-Add `--twin` for the theme surface (it writes the `[data-theme="dark"]` or `[data-theme="light"]` twin from the same plate). The token file's first three lines are fixed: `/* Sense memory: <title> */`, `/* fold: <key> */`, `/* plate: assets/plate-01.png provider=<...> */`, then the five roles with their source band as a trailing comment and the light kit (`--source-x`, `--source-y`, `--key-angle`, `--falloff`, `--lit`, `--grain`, `--plate-safe`). A role hand-moved from its sampled cluster by more than dL 0.04, dC 0.03 or dh 12 carries `/* override: <reason> */` or `moment-lint --plate` fails it as `plate-drift`.
+Add `--twin` for the theme surface (it writes the `[data-theme="dark"]` or `[data-theme="light"]` twin from the same plate). The token file's first three lines are fixed: `/* Foldlight: <title> */`, `/* fold: <key> */`, `/* plate: assets/plate-01.png provider=<...> */`, then the five roles with their source band as a trailing comment and the light kit (`--source-x`, `--source-y`, `--key-angle`, `--falloff`, `--lit`, `--grain`, `--plate-safe`). A role hand-moved from its sampled cluster by more than dL 0.04, dC 0.03 or dh 12 carries `/* override: <reason> */` or `moment-lint --plate` fails it as `plate-drift`.
 
 **Gate 4:** the `CAMERA` and `SAFE SIDE` lines quoted with `NEVER_LEAK 0`; the plate path and provider stated; the `plate-tokens` block quoted (five roles, five contrast lines, the clamps, the safe box, the key line); and `moment-lint` reading `PASS styles/tokens.css: roles=5 oklch=5 fold=<key> kit=yes findings=0`.
 
@@ -208,7 +208,7 @@ All four are required for a page surface; a theme or terminal surface takes the 
 
 ### 9. Record (the brief, written last)
 
-Append a `## Sense memory` section to `docs/DESIGN.md` (or PRODUCT.md when the project uses it). The brief is a record of what was built and is short:
+Append a `## Foldlight` section to `docs/DESIGN.md` (or PRODUCT.md when the project uses it). The brief is a record of what was built and is short:
 
 ```
 # Design brief: <title>
@@ -225,13 +225,13 @@ Append a `## Sense memory` section to `docs/DESIGN.md` (or PRODUCT.md when the p
 ## Measured              the eight verify lines, verbatim
 ```
 
-Update `docs/sense-memory.json` with `fold`, `light`, `type`, `voice`, `motion` and `measured` keys. Close with CHANGES MADE / THINGS LEFT UNTOUCHED / VERIFICATION and the paths of `index.html`, the four screenshots, the plate, the fold card and the specimen.
+Update `docs/foldlight.json` with `fold`, `light`, `type`, `voice`, `motion` and `measured` keys. Close with CHANGES MADE / THINGS LEFT UNTOUCHED / VERIFICATION and the paths of `index.html`, the four screenshots, the plate, the fold card and the specimen.
 
 **Gate 9:** the brief in the response, the two files updated, and the last line of the response is the `silhouette-lint` PASS line for the fold.
 
 ## Drift
 
-Long conversations regress toward the mean. When output later in the session starts to look generic, or a hook denies a write, do not argue with the hook: re-read `docs/sense-memory.json`, re-run the failing linter, and rebuild the failing axis from its inventory row. The fix is always upstream in the inventory, never a different default.
+Long conversations regress toward the mean. When output later in the session starts to look generic, or a hook denies a write, do not argue with the hook: re-read `docs/foldlight.json`, re-run the failing linter, and rebuild the failing axis from its inventory row. The fix is always upstream in the inventory, never a different default.
 
 ## Judgment notes
 

@@ -1,0 +1,19 @@
+{
+  "title": "first coffee, 6:40am, house asleep",
+  "prompt": "A single photograph. steam crossing the lamp beam, both hands wrapped around the cup. In frame: white glazed cup rim, black coffee surface, honey oak floorboard, amber filament, grey wool cuff, the dark of the room. 50mm macro at 35cm, f/2.0, camera at chest height, tilted 40 degrees down; focus on the near rim, everything past 12cm falls off. One light only: one tungsten table lamp, shade on, in the corner, from the left, low, just out of frame, 2400K. About 12 percent of the frame is lit; the rest falls to a deep neutral black that keeps its detail. Surfaces: one hard specular highlight no wider than 4mm on the lit edge, then a long soft falloff across the body; the glaze reads wet, not matte. no specular at all; a fine lit fuzz where the rim light grazes the fibres, deep micro shadow between them. a long low sheen running with the grain, never a hotspot. Shutter 1/60s, so anything moving in the air is slightly smeared. Shot on 35mm film at ISO 800: fine grain, no lifted shadows, no HDR, no colour grading beyond the lamp's own 2400K cast. Leave the right 40 percent of the frame in near darkness and empty. Nothing enters it. Out of frame but contributing light: a line of very small warm bulbs low on a shelf far behind the camera, 2200K, faint. It is never visible, only felt on the far edge of the subject. No people's faces, no text, no logos, no props beyond what is listed.",
+  "negative": "red and green pairing, any tree, star, gift or snowflake, any seasonal word, studio softbox, two light sources, colour gel, bokeh balls, glossy advertising retouch, text, watermark, illustration, CGI look",
+  "camera": {
+    "lens": "50mm macro",
+    "distance": "35cm",
+    "fstop": "f/2.0",
+    "angle": "camera at chest height, tilted 40 degrees down",
+    "dof": "focus on the near rim, everything past 12cm falls off",
+    "shutter": "1/60s, so anything moving in the air is slightly smeared"
+  },
+  "material": "glazed ceramic",
+  "kelvin": 2400,
+  "keyClock": 8,
+  "litPct": 12,
+  "safeSide": "right",
+  "grain": 0.045
+}

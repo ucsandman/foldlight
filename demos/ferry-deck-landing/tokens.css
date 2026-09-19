@@ -1,0 +1,25 @@
+/* Foldlight: the open deck at 23:40, one sodium lamp */
+/* fold: ticket-stub */
+/* plate: assets/plate-01.png provider=procedural */
+:root {
+  --bg:          oklch(0.127 0.005 53); /* the room outside the lamp, plate luminance p06 to p20 */
+  --surface:     oklch(0.232 0.03 66); /* the lit body of the subject, plate p55 to p72 */
+  --ink:         oklch(0.779 0.058 70); /* the face of the light source itself, plate p98 and up */
+  --accent:      oklch(0.486 0.074 66); /* the hottest chroma the lamp makes, top 1 percent */
+  --muted:       oklch(0.621 0.045 70); /* 62 percent of the way from bg to ink, on ink hue */
+
+  --source-x:    96%;
+  --source-y:    45%;
+  --key-angle:   354deg; /* every shadow falls along key-angle + 180deg */
+  --falloff:     3;
+  --lit:         0.2;
+  --grain:       0.055;
+  --plate-safe:  0% 0% 50% 100%; /* type goes here, no scrim */
+
+  --font-display: "Science Gothic", sans-serif; /* fonts.mjs rank=1 query=stamp/flat/wght,wdth */
+  --font-body:    "Pathway Extreme", sans-serif; /* fonts.mjs rank=1 query=stamp/flat/wght */
+
+  --surface-lit: oklch(0.262 0.03 66); /* surface, L plus 0.03, the lamp side of a panel */
+  --specular:    color-mix(in oklch, var(--ink) 14%, transparent);
+}
+/* travel: 2px */

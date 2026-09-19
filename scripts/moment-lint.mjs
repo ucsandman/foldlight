@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Lint a token surface against the sense-memory checks. Deterministic, no deps.
+// Lint a token surface against the foldlight checks. Deterministic, no deps.
 //
 //   node moment-lint.mjs <file.css|.json|.ts|.html|.jsx|.tsx>   lint a file
 //   node moment-lint.mjs <file> --register brand|product        timid-type floor (default product)
@@ -457,7 +457,7 @@ if (invoked && (import.meta.url === `file:///${invoked.replace(/\\/g, '/')}` || 
         hookSpecificOutput: {
           hookEventName: 'PreToolUse',
           permissionDecision: 'deny',
-          permissionDecisionReason: 'sense-memory lint: ' + r.findings.join(' | '),
+          permissionDecisionReason: 'foldlight lint: ' + r.findings.join(' | '),
           additionalContext: report(r),
         },
       }));

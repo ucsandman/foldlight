@@ -121,7 +121,7 @@ text, watermark, illustration, CGI look. A Never token that reaches the positive
 prompt is a finding:
 
 ```
-node scripts/shot.mjs docs/sense-memory.json --out docs/shot.json --check
+node scripts/shot.mjs docs/foldlight.json --out docs/shot.json --check
 NEVER_LEAK 0 (never-tokens=9 scanned=257 prompt words)
 NEVER_LEAK 1: tree (never-tokens=9 scanned=258 prompt words)   # exit 1
 ```

@@ -96,7 +96,7 @@ function reflexList() {
 }
 
 async function getJSON(url) {
-  const r = await fetch(url, { headers: { 'user-agent': 'sense-memory/fonts.mjs' } });
+  const r = await fetch(url, { headers: { 'user-agent': 'foldlight/fonts.mjs' } });
   if (!r.ok) throw new Error(`${url} -> ${r.status}`);
   const t = await r.text();
   return JSON.parse(t.replace(/^\)\]\}'\s*/, ''));

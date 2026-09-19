@@ -1,0 +1,37 @@
+/* Foldlight: Saturday growers market, 9am */
+/* fold: receipt */
+/* plate: demos/farmers-market-storefront/assets/plate-01.png provider=procedural */
+:root {
+  --bg:          oklch(0.898 0 94); /* the lit ground of the scene, plate luminance p85 to p95 */
+  --surface:     oklch(0.958 0 94); /* the subject one step below the ground, plate p72 to p85 */
+  --ink:         oklch(0.489 0.065 91); /* the deepest shadow in the frame, plate p04 to p12 */
+  --accent:      oklch(0.587 0.102 93); /* the hottest chroma the light makes, top 1 percent */
+  --muted:       oklch(0.489 0.045 91); /* 62 percent of the way from bg to ink, on ink hue */
+
+  --source-x:    18%;
+  --source-y:    6.5%;
+  --key-angle:   234deg; /* every shadow falls along key-angle + 180deg */
+  --falloff:     1.4;
+  --lit:         0.85;
+  --grain:       0;
+  --plate-safe:  0% 0% 100% 55%; /* type goes here, no scrim */
+
+  --surface-lit: oklch(0.988 0 94);                        /* --surface plus L 0.03, the side the light lands on */
+  --specular:    color-mix(in oklch, var(--ink) 14%, transparent);
+  --edge:        color-mix(in oklch, var(--ink) 28%, transparent); /* the cut edge of the roll and the two rules */
+  --rule:        color-mix(in oklch, var(--ink) 70%, transparent); /* the leader, dimmed per row by the lit step */
+
+  --font-display: "Pathway Extreme", sans-serif; /* fonts.mjs rank=3 query=pen/flat/wght,wdth */
+  --font-body:    "Pathway Extreme", sans-serif; /* fonts.mjs rank=2 query=pen/flat/wght */
+
+  /* one family at one size, plus the total; opsz 8..144 carries both ends */
+  --step--1:  0.8125rem;                  /* the header block, uppercased in CSS */
+  --step-0:   1.125rem;                   /* every line of the roll */
+  --step-1:   1.5rem;                     /* the running head of a section */
+  --step-3:   clamp(2.6rem, 8vw, 7rem);   /* the total, the one thing at scale */
+
+  /* motion score: crisp, wood. travel: 3px */
+  --transient: 160ms;
+  --curve-transient: cubic-bezier(.3,.7,.2,1);  /* wood: heavy to start, settles without a snap */
+  --curve-transport: cubic-bezier(.37,0,.63,1);
+}

@@ -7,7 +7,7 @@ allowed_tools: [Read, Glob, Grep, Skill, Write]
 First, recreate the project's committed token file. Write this to styles/tokens.css exactly as it appears, character for character, no additions:
 
 ```css
-/* Sense memory: First coffee, 6:40am, house asleep */
+/* Foldlight: First coffee, 6:40am, house asleep */
 /* fold: ledger */
 /* plate: docs/tmp/plate.png provider=procedural */
 :root {

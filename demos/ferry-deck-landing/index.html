@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nearing</title>
+<meta name="description" content="Nearing counts the distance down on a long night journey and wakes you once, a set number of minutes before your stop. No signal needed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Science+Gothic:CTRS,slnt,wdth,wght@0..85,-10..0,50..200,100..900&family=Pathway+Extreme:opsz,wdth,wght@8..144,75..100,100..900&display=swap">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  :root {
+    --rule-1: color-mix(in oklch, var(--muted) 42%, transparent);
+    --rule-2: color-mix(in oklch, var(--muted) 24%, transparent);
+    --curve-steel: cubic-bezier(.4, 0, .2, 1);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  button, input, select, textarea { font: inherit; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* the one lamp: sodium, clock 3, at --source-x --source-y */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at var(--source-x) var(--source-y),
+        color-mix(in oklch, var(--accent) 34%, transparent) 0%,
+        color-mix(in oklch, var(--accent) 12%, transparent) 34%,
+        transparent 70%);
+    animation: lamp 14s cubic-bezier(.37, 0, .63, 1) infinite alternate;
+  }
+  @keyframes lamp { from { filter: brightness(.94); } to { filter: brightness(1.06); } }
+
+  /* one grain layer, document level */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 8;
+    pointer-events: none;
+    opacity: var(--grain);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+  }
+
+  h1, h2, p, li { text-wrap: pretty; }
+
+  .sheet {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 12px 118px;
+    padding-right: 24px;
+  }
+  .wide { grid-column: 1; padding: 0 56px 120px 72px; min-width: 0; }
+
+  /* the stub: the same facts, reduced, and it stays */
+  .stub {
+    grid-column: 3;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-right: 1px solid var(--rule-1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0 24px 16px;
+    font-size: 11px;
+    line-height: 1.45;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  /* the perforation, dotted, full height */
+  .stub::before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    background-image: repeating-linear-gradient(to bottom, var(--rule-1) 0 2px, transparent 2px 6px);
+    background-size: 1px 100%;
+    background-position: 5px 0;
+    background-repeat: no-repeat;
+  }
+  .brand { letter-spacing: .2em; }
+  .field {
+    height: 84px;
+    padding-top: 22px;
+    margin-top: 16px;
+    border-top: 1px solid var(--rule-2);
+  }
+  .field .value { color: var(--ink); transition: color 320ms var(--curve-steel); }
+  .meta {
+    position: absolute;
+    right: 14px;
+    bottom: 132px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    color: var(--muted);
+    letter-spacing: .22em;
+  }
+  .set-link {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 12px 0 10px;
+    background: color-mix(in oklch, var(--surface-lit) 72%, var(--accent));
+    border-right: 2px solid var(--accent);
+    box-shadow: inset 0 1px 0 var(--specular);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: .14em;
+    transition: background-color 320ms var(--curve-steel);
+  }
+  .set-link:hover { background-color: color-mix(in oklch, var(--surface-lit) 46%, var(--accent)); }
+
+  /* the fold */
+  .hero {
+    min-height: calc(100vh + 4px);
+    padding-top: 132px;
+    display: flex;
+    flex-direction: column;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 78, "CTRS" 0;
+    font-weight: 500;
+    font-size: clamp(40px, 6.1vw, 88px);
+    line-height: .98;
+    letter-spacing: -.005em;
+    max-width: 16ch;
+  }
+  .lede {
+    margin: 30px 0 0;
+    max-width: 38ch;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  /* the plate, cropped on the lamp, no card around it */
+  .plate { position: relative; margin: auto -56px 0 -72px; height: 384px; overflow: hidden; }
+  .plate img {
+    display: block;
+    width: 100%;
+    height: 384px;
+    object-fit: cover;
+    object-position: 74% 52%;
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 30%);
+    animation: lamp 14s cubic-bezier(.37, 0, .63, 1) infinite alternate;
+  }
+  .plate::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 34%;
+    background: linear-gradient(to bottom, transparent, var(--bg));
+  }
+
+  section { padding-top: 96px; }
+  h2 {
+    margin: 0 0 40px;
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 82, "CTRS" 0;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.15;
+    max-width: 24ch;
+  }
+  /* separation: horizontal perforations, on the wide side only, lit from the lamp side */
+  .run { position: relative; display: grid; grid-template-columns: 104px minmax(0, 1fr); padding-top: 24px; padding-bottom: 24px; }
+  .run + .run::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--rule-2) 12%, var(--rule-1));
+  }
+  .run .t { font-size: 13px; letter-spacing: .14em; color: var(--muted); padding-top: 4px; }
+  .run p { margin: 0; max-width: 46ch; }
+
+  .says { list-style: none; margin: 0; padding: 0; max-width: 58ch; }
+  .says li { position: relative; padding-top: 16px; padding-bottom: 16px; padding-left: 104px; }
+  .says li + li::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--rule-2) 12%, var(--rule-1));
+  }
+  .says li::after {
+    content: attr(data-state);
+    position: absolute;
+    left: 0;
+    top: 21px;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .set { max-width: 52ch; }
+  .set p { margin: 0 0 32px; }
+  .picker { display: flex; align-items: center; gap: 16px; }
+  .picker label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .picker select {
+    height: 48px;
+    min-width: 168px;
+    padding: 0 14px;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--rule-1);
+    border-radius: 0;
+    font-size: 17px;
+  }
+  .price { margin-top: 40px; color: var(--muted); }
+
+  a:focus-visible, select:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 760px) {
+    .sheet { grid-template-columns: minmax(0, 1fr); padding-right: 0; }
+    /* the perforation never moves: it runs the full height of the narrow page too */
+    .sheet::before {
+      content: "";
+      position: absolute;
+      left: 94px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      z-index: 0;
+      background: repeating-linear-gradient(to bottom, var(--rule-1) 0 3px, transparent 3px 4.6px);
+    }
+    .wide { grid-column: 1; grid-row: 2; padding: 0 20px 40px; }
+    .hero, .wide > section { padding-left: 84px; }
+    .run .t { position: absolute; left: -84px; top: 22px; }
+    .says li::after { left: -84px; }
+    .stub {
+      grid-column: 1;
+      grid-row: 1;
+      height: auto;
+      flex-direction: row;
+      align-items: center;
+      gap: 18px;
+      padding: 0 20px;
+      border-right: 0;
+      border-bottom: 1px dotted var(--rule-1);
+      background: var(--bg);
+    }
+    .stub::before { display: none; }
+    .field { height: auto; margin-top: 0; padding-top: 0; border-top: 0; }
+    .field.hide-narrow { display: none; }
+    .meta { display: none; }
+    .set-link { margin-top: 0; margin-left: auto; height: 56px; padding: 0 14px; border-left: 0; }
+    .hero { min-height: auto; padding-top: 40px; padding-bottom: 56px; }
+    .plate { margin: 32px -20px 0; height: 232px; }
+    .plate img { height: 232px; }
+    .run { grid-template-columns: minmax(0, 1fr); padding-top: 18px; padding-bottom: 18px; }
+    .says li { padding-left: 0; }
+    section { padding-top: 56px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::before { animation: none; filter: brightness(1.04); opacity: 1; }
+    .plate img { animation: none; filter: brightness(1.04); }
+    /* the twin is a design: the lamp sits at full, the crossfades stay, the time is gone */
+    .set-link {
+      transition-property: color, box-shadow;
+      transition-duration: .01ms;
+      background: color-mix(in oklch, var(--surface-lit) 46%, var(--accent));
+    }
+    .field .value {
+      transition-property: color;
+      transition-duration: .01ms;
+      color: var(--ink);
+    }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <main class="wide">
+    <div class="hero">
+      <h1>We wake you<br>before your stop.</h1>
+      <p class="lede">We are counting the distance down while you sleep. One alarm lands eight minutes out. Nothing else does.</p>
+      <figure class="plate">
+        <img src="assets/plate-01.png" alt="A rendered light study: one warm source low on the right, the rest of the frame falling to black.">
+      </figure>
+    </div>
+
+    <section>
+      <h2>The night, as we keep it.</h2>
+      <div class="run"><span class="t">23:10</span><p>We start counting once the doors close.</p></div>
+      <div class="run"><span class="t">01:20</span><p>The phone stays dark and we hold the distance.</p></div>
+      <div class="run"><span class="t">04:52</span><p>Eight minutes out, we wake you once.</p></div>
+    </section>
+
+    <section>
+      <h2>We only ever say six things.</h2>
+      <ul class="says">
+        <li data-state="empty">We are not holding anything for you yet.</li>
+        <li data-state="loading">We are working out how long is left.</li>
+        <li data-state="error">We lost the count at 23:12. One tap starts it again.</li>
+        <li data-state="offline">Nothing is reaching us out here. We keep counting anyway.</li>
+        <li data-state="done">We are pulling in now. That was the last of it.</li>
+        <li data-state="first-run">We are keeping the first night quiet on purpose.</li>
+      </ul>
+    </section>
+
+    <section class="set" id="set">
+      <h2>Set it once and put it away.</h2>
+      <p>Choose how long before the stop we should wake you.</p>
+      <div class="picker">
+        <label for="mins">Minutes out</label>
+        <select id="mins">
+          <option value="5">5 minutes</option>
+          <option value="8" selected>8 minutes</option>
+          <option value="15">15 minutes</option>
+        </select>
+      </div>
+      <p class="price">Nine dollars, paid once. We do not sell anything else.</p>
+    </section>
+  </main>
+
+  <aside class="stub">
+    <span class="brand">Nearing</span>
+    <div class="field"><span class="value" id="mins-out">8 minutes out</span></div>
+    <div class="field hide-narrow">Works offline</div>
+    <span class="meta">Series 12, night runs only</span>
+    <a class="set-link" href="#set">Set an arrival</a>
+  </aside>
+</div>
+<script>
+  var sel = document.getElementById('mins');
+  var out = document.getElementById('mins-out');
+  sel.addEventListener('change', function () { out.textContent = sel.value + ' minutes out'; });
+</script>
+</body>
+</html>

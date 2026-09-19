@@ -1,0 +1,19 @@
+{
+  "title": "Saturday growers market, 9am",
+  "prompt": "A single photograph. the rubbed-out price with the new one rechalked beside it, hands turning a tomato to check the far side. In frame: tomato skin warm red-orange, weathered crate slats sun-bleached grey-brown, chalkboard slate near-black with a green cast, chalk dust ghosted white, cut basil deep green, brown paper bag kraft tan, sun-baked pavement grey. 85mm at 6m, f/2.8, camera at eye height, compressed; shallow, one plane sharp. One light only: the 9am sun, low and already hard, canvas awnings cutting hard bands of shade, from the upper left, 4000K. About 85 percent of the frame is lit; the rest falls to a deep neutral black that keeps its detail. Surfaces: a long low sheen running with the grain, never a hotspot. one hard specular highlight no wider than 4mm on the lit edge, then a long soft falloff across the body; the glaze reads wet, not matte. a single anisotropic streak stretched along the brush direction. Shutter 1/500s. Shot on 35mm film at ISO 800: fine grain, no lifted shadows, no HDR, no colour grading beyond the lamp's own 4000K cast. Leave the right 40 percent of the frame in near darkness and empty. Nothing enters it. Out of frame but contributing light: white chalk dust on a wiped board throwing a soft bounce up into the shade, 5000K, weak; a row of small dull metal glints from a shelf just outside the frame, 4000K, weak. It is never visible, only felt on the far edge of the subject. No people's faces, no text, no logos, no props beyond what is listed.",
+  "negative": "gingham, barn, mason lid, studio softbox, two light sources, colour gel, bokeh balls, glossy advertising retouch, text, watermark, illustration, CGI look",
+  "camera": {
+    "lens": "85mm",
+    "distance": "6m",
+    "fstop": "f/2.8",
+    "angle": "camera at eye height, compressed",
+    "dof": "shallow, one plane sharp",
+    "shutter": "1/500s"
+  },
+  "material": "wood",
+  "kelvin": 4000,
+  "keyClock": 11,
+  "litPct": 85,
+  "safeSide": "right",
+  "grain": 0
+}

@@ -1,0 +1,86 @@
+{
+  "title": "first coffee, 6:40am, house asleep",
+  "moment": "It's Christmas morning, 6:40am, and the house is still asleep. One lamp is on in the corner, the only light besides the tree bulbs strung low across the mantel. This is the first coffee, held in both hands, white ceramic warm against my palms. Wool socks on the cold wood floor, steam curling up into the lamp's glow. Nobody else is up yet, and the quiet has a weight to it, the kind that only happens once a year.",
+  "register": "brand",
+  "surface": "landing",
+  "inventory": {
+    "light": {
+      "source": "one tungsten table lamp, shade on, in the corner",
+      "clock": 8,
+      "kelvin": 2400,
+      "litFraction": 0.12,
+      "fill": ["a line of very small warm bulbs low on a shelf far behind the camera, 2200K, faint"]
+    },
+    "objects": ["white glazed cup rim", "black coffee surface", "honey oak floorboard", "amber filament", "grey wool cuff", "the dark of the room"],
+    "materials": ["glazed ceramic", "wool", "wood"],
+    "air": "warm, still, close",
+    "tempo": "slow",
+    "sound": "near silence, one tick",
+    "gaze": "down",
+    "text": "two lines in ballpoint on a small card",
+    "document": "account book",
+    "gesture": "both hands wrapped around the cup",
+    "keepsake": "steam crossing the lamp beam",
+    "utterance": "Nobody else is up yet."
+  },
+  "never": ["red and green pairing", "any tree, star, gift or snowflake", "any seasonal word"],
+  "fold": {
+    "key": "ledger",
+    "surface": "landing",
+    "idea": "The page keeps an account. Every section is an entry on one pitch, and one column accumulates.",
+    "envelope": { "ruleRows": 12, "vRules": 3, "rightCol": 0.377 },
+    "signature": "the ruling is light: every rule is a gradient set by its distance from the lamp, so a page of empty ruled lines reads as a lit object"
+  },
+  "light": {
+    "plate": "assets/plate-01.png",
+    "provider": "procedural",
+    "sourceX": "5.4%",
+    "sourceY": "52%",
+    "keyAngle": "177deg",
+    "falloff": 3,
+    "lit": 0.12,
+    "grain": 0.055,
+    "plateSafe": "46.9% 0% 53.1% 100%",
+    "roles": {
+      "bg": "oklch(0.127 0.005 53)",
+      "surface": "oklch(0.243 0.034 72)",
+      "ink": "oklch(0.823 0.057 75)",
+      "accent": "oklch(0.535 0.098 71)",
+      "muted": "oklch(0.628 0.045 75)"
+    }
+  },
+  "type": {
+    "display": { "family": "Bodoni Moda", "rank": 2, "query": "pen/wedge/opsz,wght", "source": "google" },
+    "body": { "family": "Commissioner", "rank": 1, "query": "pen/round/wght", "source": "google" },
+    "scanned": 2046,
+    "specimen": "specimen.png"
+  },
+  "voice": {
+    "spec": "voice.json",
+    "states": {
+      "empty": "Nothing has asked for you yet.",
+      "loading": "Counting what came in overnight.",
+      "error": "The count stopped at 5:02. Open the ledger and it starts again.",
+      "offline": "Nothing since 4:12. Whatever arrives will wait.",
+      "done": "That was all of it.",
+      "first-run": "This page is empty until tomorrow morning."
+    }
+  },
+  "motion": {
+    "verb": "reveal",
+    "travel": 1,
+    "transient": { "ms": 90, "curve": "ceramic", "name": "the glazed base set down on the wood floor" },
+    "transport": { "bpm": 5.5, "feel": "one slow breath, in and out, the room's tone" },
+    "resolve": "once",
+    "silence": 300,
+    "twin": "the lamp is already at full, the beam is held, every ruling is lit one step brighter and nothing is waiting to arrive"
+  },
+  "measured": {
+    "file": "MEASURED.md",
+    "silhouette": "PASS demos/christmas-morning-landing/fold-1440.png: cells=200x125 viewport=1440x900 foldRows=125 inkedRows=53 ground=rgb(26,18,9) 34% envelope=5 fold=ledger findings=0",
+    "craft": "PASS index.html: nodes=132 rules=15 states=6/6 findings=0",
+    "tokens": "PASS demos/christmas-morning-landing/tokens.css: roles=5 oklch=6 fold=ledger kit=yes findings=0",
+    "copy": "PASS demos/christmas-morning-landing/index.html: strings=69 words=312 sentences=45 beats=31 median=6 states=6/6 findings=0",
+    "bands": "PASS demos/christmas-morning-landing/index.html: bands=6 hero IN scale IN contrastFails IN biggest OUT bleed OUT images OUT"
+  }
+}

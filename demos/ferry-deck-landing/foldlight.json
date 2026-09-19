@@ -1,0 +1,41 @@
+{
+  "title": "the open deck at 23:40, one sodium lamp",
+  "moment": "It is 23:40 and I am on the open deck of a night ferry with both hands flat on the wet steel rail. One sodium lamp on the mast, at about 3 o'clock from where I stand, is lighting a fifth of the deck and nothing else; everything past it is black water and a cold wind coming straight at me. The paper boarding pass is folded twice in my coat pocket and I keep checking it is still there. The engines hum up through the soles of my feet, steady, one low note that never changes. I am looking out at nothing, and nothing is looking back.",
+  "register": "brand",
+  "surface": "landing",
+  "inventory": {
+    "light": {
+      "source": "one unshaded sodium lamp high on the mast, off to the right",
+      "clock": 3,
+      "kelvin": 2000,
+      "litFraction": 0.2,
+      "fill": "a low broken row of very small cold points across the dark, 4000K, faint, never reaching the near surfaces, and one slow cold sweep that passes high above them every few seconds and lands on nothing"
+    },
+    "objects": [
+      "wet steel rail, cold grey, running with the lamp's orange spill along its top edge",
+      "black water with no horizon in it",
+      "the sodium spill lying across one fifth of the painted deck plate",
+      "grey non-slip paint worn back to bare metal at the edges",
+      "salt haze on everything, softening the one light",
+      "a folded paper boarding pass, soft at the crease, warm from the pocket",
+      "a damp wool sleeve pushed back off the wrist"
+    ],
+    "materials": ["steel", "glass", "wool"],
+    "air": "cold, wet, open, moving",
+    "tempo": "drift",
+    "sound": "the engines under the feet, one low note that never changes",
+    "gaze": "out",
+    "text": "the sailing time and the fare printed on the folded pass in a thermal dot grid, blunt and slightly smeared",
+    "document": "boarding pass",
+    "gesture": "both hands flat on the wet rail, holding on",
+    "keepsake": "the soft crease where the pass was folded in the pocket all evening",
+    "utterance": "We are still an hour out."
+  },
+  "never": [
+    "a lighthouse",
+    "harbour lights",
+    "cruise liner branding",
+    "anchor and porthole iconography",
+    "nautical navy stripes"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "title": "Saturday growers market, 9am",
+  "moment": "It is Saturday, just past 9am in August, and the low sun is already hard. Wooden crates are stacked along the tables, warm from the truck ride in. Chalk prices on slate lean against every stall, smudged where a thumb brushed past. Brown paper bags sit folded under the scale, and the air is thick with overripe fruit and cut basil. Everyone is talking at once, and my hands are turning a tomato to check the far side.",
+  "register": "brand",
+  "surface": "landing",
+  "inventory": {
+    "light": {
+      "source": "the 9am sun, low and already hard, canvas awnings cutting hard bands of shade",
+      "clock": 11,
+      "kelvin": 4000,
+      "litFraction": 0.85,
+      "fill": [
+        "white chalk dust on a wiped board throwing a soft bounce up into the shade, 5000K, weak",
+        "a row of small dull metal glints from a shelf just outside the frame, 4000K, weak"
+      ]
+    },
+    "objects": [
+      "tomato skin warm red-orange",
+      "weathered crate slats sun-bleached grey-brown",
+      "chalkboard slate near-black with a green cast",
+      "chalk dust ghosted white",
+      "cut basil deep green",
+      "brown paper bag kraft tan",
+      "sun-baked pavement grey"
+    ],
+    "materials": ["wood", "paper", "glazed ceramic", "steel"],
+    "air": "warm, close, crowded, dense",
+    "tempo": "crisp",
+    "sound": "a hum of overlapping voices, no one sound cuts through",
+    "gaze": "across",
+    "text": "chalk prices on slate, hand-chalked, uneven strokes",
+    "document": "till roll",
+    "gesture": "hands turning a tomato to check the far side",
+    "keepsake": "the rubbed-out price with the new one rechalked beside it",
+    "utterance": "Four for a dollar, and take the soft one."
+  },
+  "never": ["gingham", "barn", "mason lid"]
+}

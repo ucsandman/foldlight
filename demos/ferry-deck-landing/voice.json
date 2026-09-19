@@ -1,0 +1,18 @@
+{
+  "brand": "Nearing",
+  "person": "first-plural",
+  "volume": "quiet",
+  "median": [6, 10],
+  "ceiling": 16,
+  "headlineWords": 8,
+  "clauseCap": 1,
+  "props": [
+    "lighthouse", "harbour", "harbor", "cruise", "liner", "anchor", "porthole",
+    "nautical", "navy", "stripes", "rail", "railing", "water", "deck", "lamp",
+    "sodium", "engine", "mast", "salt", "haze", "wool", "coat", "pocket",
+    "pass", "boarding", "ferry", "crossing", "sea", "shore", "tide", "boat",
+    "ship", "sail", "sailing", "voyage", "wharf", "dock"
+  ],
+  "states": ["empty", "loading", "error", "offline", "done", "first-run"],
+  "labelCase": "sentence"
+}

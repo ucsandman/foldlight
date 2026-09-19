@@ -1,0 +1,19 @@
+{
+  "title": "the open deck at 23:40, one sodium lamp",
+  "prompt": "A single photograph. the soft crease where the pass was folded in the pocket all evening, both hands flat on the wet rail, holding on. In frame: wet steel rail, cold grey, running with the lamp's orange spill along its top edge, black water with no horizon in it, the sodium spill lying across one fifth of the painted deck plate, grey non-slip paint worn back to bare metal at the edges, salt haze on everything, softening the one light, a folded paper boarding pass, soft at the crease, warm from the pocket, a damp wool sleeve pushed back off the wrist. 35mm at 3m, f/8, camera level, horizon on the lower third; deep, everything sharp. One light only: one unshaded sodium lamp high on the mast, off to the right, from the right, 2000K. About 20 percent of the frame is lit; the rest falls to a deep neutral black that keeps its detail. Surfaces: a single anisotropic streak stretched along the brush direction. two specular hits, one on the near wall and one refracted through the far wall. no specular at all; a fine lit fuzz where the rim light grazes the fibres, deep micro shadow between them. Shutter 1/30s, movement drawn as a soft trail. Shot on 35mm film at ISO 800: fine grain, no lifted shadows, no HDR, no colour grading beyond the lamp's own 2000K cast. Leave the left 40 percent of the frame in near darkness and empty. Nothing enters it. Out of frame but contributing light: a low broken row of very small cold points across the dark, 4000K, faint, never reaching the near surfaces, and one slow cold sweep that passes high above them every few seconds and lands on nothing. It is never visible, only felt on the far edge of the subject. No people's faces, no text, no logos, no props beyond what is listed.",
+  "negative": "a lighthouse, harbour lights, cruise liner branding, anchor and porthole iconography, nautical navy stripes, studio softbox, two light sources, colour gel, bokeh balls, glossy advertising retouch, text, watermark, illustration, CGI look",
+  "camera": {
+    "lens": "35mm",
+    "distance": "3m",
+    "fstop": "f/8",
+    "angle": "camera level, horizon on the lower third",
+    "dof": "deep, everything sharp",
+    "shutter": "1/30s, movement drawn as a soft trail"
+  },
+  "material": "steel",
+  "kelvin": 2000,
+  "keyClock": 3,
+  "litPct": 20,
+  "safeSide": "left",
+  "grain": 0.045
+}

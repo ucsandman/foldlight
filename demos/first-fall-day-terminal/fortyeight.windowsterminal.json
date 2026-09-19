@@ -1,0 +1,23 @@
+{
+  "name": "Fortyeight",
+  "background": "#070604",
+  "foreground": "#cbb588",
+  "cursorColor": "#937b47",
+  "selectionBackground": "#231b0a",
+  "black": "#070604",
+  "red": "#9a6747",
+  "green": "#a19c87",
+  "yellow": "#937b47",
+  "blue": "#7ba2c1",
+  "purple": "#a292a6",
+  "cyan": "#9cb6bd",
+  "white": "#cbb588",
+  "brightBlack": "#3d372c",
+  "brightRed": "#ba8464",
+  "brightGreen": "#b6b19c",
+  "brightYellow": "#b59b64",
+  "brightBlue": "#96b9d5",
+  "brightPurple": "#b8a7bc",
+  "brightCyan": "#b1c9cf",
+  "brightWhite": "#e1d3b7"
+}

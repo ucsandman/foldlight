@@ -1,0 +1,21 @@
+{
+  "title": "first coffee, 6:40am, house asleep",
+  "moment": "It's Christmas morning, 6:40am, and the house is still asleep. One lamp is on in the corner, the only light besides the tree bulbs strung low across the mantel. This is the first coffee, held in both hands, white ceramic warm against my palms. Wool socks on the cold wood floor, steam curling up into the lamp's glow. Nobody else is up yet, and the quiet has a weight to it, the kind that only happens once a year.",
+  "register": "product",
+  "surface": "dashboard",
+  "inventory": {
+    "light": { "source": "one tungsten table lamp, shade on, in the corner", "clock": 8, "kelvin": 2400, "litFraction": 0.12, "fill": ["a line of very small warm bulbs low on a shelf far behind the camera, 2200K, faint"] },
+    "objects": ["white glazed cup rim", "black coffee surface", "honey oak floorboard", "amber filament", "grey wool cuff", "the dark of the room"],
+    "materials": ["glazed ceramic", "wool", "wood"],
+    "air": "warm, still, close",
+    "tempo": "slow",
+    "sound": "near silence, one tick",
+    "gaze": "down",
+    "text": "two lines in ballpoint on a small card",
+    "document": "account book",
+    "gesture": "both hands wrapped around the cup",
+    "keepsake": "steam crossing the lamp beam",
+    "utterance": "Nobody else is up yet."
+  },
+  "never": ["red and green pairing", "any tree, star, gift or snowflake", "any seasonal word"]
+}

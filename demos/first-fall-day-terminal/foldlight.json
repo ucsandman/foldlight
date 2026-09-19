@@ -1,0 +1,42 @@
+{
+  "title": "The first crisp morning, Saturday 8am, 48 degrees",
+  "moment": "It is the first crisp day of fall, Saturday, 8am, 48 degrees, and I am out on the walk with the second cup. The sun is still low and gold, coming in from the right over the roofline, so the whole street is shade with one band of light laid across it, and the wet leaves on the sidewalk hold that band back up at me in broken pieces. I have a grey cotton sweatshirt on with the sleeves pulled over my hands, and the coffee steam is visible for the first time this year, standing straight up and then crossing the light. Everything is sharper than it was in August: the edges of the roofline, the cold on the back of my neck, the click of the pen clipped to the pocket notebook in my other hand. Nothing is moving except the steam and me.",
+  "register": "product",
+  "surface": "terminal",
+  "inventory": {
+    "light": {
+      "source": "the low sun itself, no diffusion, clearing the roofline to the right of the frame",
+      "clock": 3,
+      "kelvin": 3200,
+      "litFraction": 0.18,
+      "fill": "a low broken band of small wet mirrored patches on the walk, throwing the key back up into the underside of the subject at 3200K, dim and fragmented"
+    },
+    "objects": [
+      "wet concrete walk in shade, dark grey with a cold cast",
+      "the one gold band the low sun lays across that wet concrete",
+      "a heather grey cotton fleece cuff pulled over the knuckles",
+      "black coffee in a plain grey cup",
+      "steam standing straight up off the cup and crossing the light",
+      "the grey board cover of a pocket book, dry paper",
+      "the brushed steel clip of a pen on that cover",
+      "the cold blue of the sky above the roofline, unlit"
+    ],
+    "materials": ["wool", "wet concrete", "steel"],
+    "air": { "temp": "cold, 48 degrees", "motion": "still", "density": "open and dry" },
+    "tempo": "crisp",
+    "sound": "near silence, one dry click as the clip snaps onto the cover",
+    "gaze": "out along the walk, level with the street",
+    "textInScene": "the date written across the top of the page in ballpoint, over a printed rule and a printed page number",
+    "document": "a pocket notebook with a pen clipped to it",
+    "gesture": "pulling the sleeve over the hand before taking the cup",
+    "keepsake": "the one gold band of light across the wet walk, everything else in shade",
+    "utterance": "We can see all the way to the corner today."
+  },
+  "never": [
+    "any leaf, leaves or a leaf silhouette",
+    "orange and dun pairing, a pumpkin or a gourd",
+    "any seasonal word, any month, any harvest imagery",
+    "a knit scarf, a plaid blanket, tall rubber boots",
+    "red and green pairing"
+  ]
+}

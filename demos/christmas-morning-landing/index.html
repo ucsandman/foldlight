@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carryover, a daybook for one-person shops</title>
+<meta name="description" content="Carryover writes one page while you sleep. Everything that moved since you closed, in the order it happened, read before the shop opens.">
+<link rel="stylesheet" href="tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..500&family=Commissioner:wght@400;500&display=swap">
+<style>
+/* one lamp, one row pitch, one accumulating column. tokens.css is the only colour source. */
+:root{
+  --s-label:12px; --s-small:13px; --s-lede:17px; --s-amount:19px; --s-h2:26px; --s-total:48px;
+  --s-display:clamp(2.6rem,6vw,5.4rem);
+  --cta-bg:color-mix(in oklch,var(--accent) 70%,var(--ink)); /* the face of the filament, lit enough to carry dark type */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--font-body); font-size:var(--s-small); line-height:1.55;
+  font-variant-numeric:tabular-nums lining-nums;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+button,input,select,textarea{font:inherit}
+::selection{background:color-mix(in oklch,var(--accent) 26%,transparent);color:var(--ink)}
+
+/* the lamp: one fixed radial at the sampled source, and nothing else lit */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at var(--source-x) var(--source-y),
+      color-mix(in oklch,var(--accent) 12%,transparent),transparent 70%),
+    radial-gradient(ellipse 150% 115% at var(--source-x) var(--source-y),
+      color-mix(in oklch,var(--surface) 92%,transparent),transparent 76%);
+}
+/* one grain layer, document level, at the sampled --grain */
+body::after{
+  content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
+  opacity:var(--grain);mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:220px 220px;
+}
+/* the keepsake: warmth crossing the beam. masked and blurred, never a clip-path shape */
+.shell::before{
+  content:"";position:fixed;left:0;top:26%;width:min(720px,58vw);height:380px;z-index:0;pointer-events:none;
+  background:radial-gradient(52% 42% at 24% 58%,color-mix(in oklch,var(--accent) 15%,transparent),transparent 74%);
+  filter:blur(34px);
+  mask-image:radial-gradient(closest-side,#000 40%,transparent 100%);
+  animation:breathe var(--loop-room) var(--ease-breath) infinite;
+}
+@keyframes breathe{0%,100%{opacity:.34}50%{opacity:.64}}
+
+/* the shell: a rail of index tabs and the book. no top bar exists, at any width. */
+.shell{position:relative;z-index:2;display:grid;grid-template-columns:var(--rail) minmax(0,1fr);min-height:100vh}
+.rail{display:grid;grid-template-rows:auto 1fr auto;padding-top:26px;padding-bottom:30px;
+  border-right:var(--rule) solid color-mix(in oklch,var(--ink) 20%,transparent)}
+.mark{font-family:var(--font-display);font-size:var(--s-lede);line-height:1;padding-left:22px}
+.tabs{align-self:start;margin-top:22vh;display:flex;flex-direction:column}
+.tabs a{display:flex;align-items:center;min-height:44px;padding-left:22px;
+  font-size:var(--s-small);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  border-top:var(--rule) solid color-mix(in oklch,var(--ink) 13%,transparent);
+  transition:color var(--t-warm) var(--ease-ceramic),background-color var(--t-warm) var(--ease-ceramic)}
+.tabs a:hover{color:var(--ink);background-color:color-mix(in oklch,var(--accent) 10%,transparent)}
+.folio{font-family:var(--font-display);font-size:var(--s-label);letter-spacing:.16em;color:var(--muted);padding-left:22px}
+
+/* the book: two continuous verticals, one row pitch */
+.book{position:relative;padding-right:var(--edge)}
+.book::before,.book::after{content:"";position:absolute;top:0;bottom:0;width:var(--rule);
+  background:linear-gradient(180deg,
+    color-mix(in oklch,var(--accent) 32%,transparent),
+    color-mix(in oklch,var(--ink) 20%,transparent) 20%,
+    color-mix(in oklch,var(--ink) 16%,transparent))}
+.book::before{left:calc(var(--col-time) + var(--gap-col)/2)}
+.book::after{right:calc(var(--edge) + var(--col-amount) + var(--gap-col)/2)}
+
+.row{display:grid;
+  grid-template-columns:var(--col-time) minmax(0,1fr) var(--col-note) var(--col-amount);
+  column-gap:var(--gap-col);align-items:baseline;position:relative;
+  padding-top:18px;padding-bottom:18px}
+/* the signature: the ruling is light. it is brightest under the lamp and dims to the far corner. */
+.row::after{content:"";position:absolute;left:0;right:0;bottom:0;height:var(--rule);
+  background:linear-gradient(90deg,
+    color-mix(in oklch,var(--ink) calc(var(--lit-row,28) * 1%),transparent),
+    color-mix(in oklch,var(--ink) calc(var(--lit-row,28) * 0.84%),transparent) 58%,
+    color-mix(in oklch,var(--ink) calc(var(--lit-row,28) * 0.68%),transparent))}
+.row{transition:background-color var(--t-warm) var(--ease-ceramic)}
+.entry:hover{background-color:color-mix(in oklch,var(--accent) 7%,transparent)}
+
+.t{font-family:var(--font-display);font-size:var(--s-small);color:var(--muted)}
+.n{font-size:var(--s-small);line-height:1.62;color:var(--muted)}
+.a{grid-column:4;text-align:right;font-family:var(--font-display);font-size:var(--s-amount);color:var(--ink)}
+.blank{height:52px;padding-top:0;padding-bottom:0}
+
+h1,h2,p{text-wrap:pretty}
+h1{font-family:var(--font-display);font-weight:400;font-size:var(--s-display);
+  line-height:.94;letter-spacing:-.014em;text-indent:-.045em}
+.lede{font-size:var(--s-lede);line-height:1.5;max-width:40ch;
+  color:color-mix(in oklch,var(--ink) 88%,var(--muted));padding-top:18px}
+.hero{padding-top:34px;padding-bottom:38px}
+.hero .a{font-size:var(--s-lede);color:var(--muted)}
+
+h2{font-family:var(--font-display);font-weight:400;font-size:var(--s-h2);line-height:1.18}
+.sub{font-size:var(--s-small);color:var(--muted);max-width:40ch;padding-top:10px}
+.colhead > *{font-size:var(--s-label);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);font-weight:500}
+.colhead{padding-top:10px;padding-bottom:10px}
+.colhead .a{font-size:var(--s-label);color:var(--muted)}
+
+.total{padding-top:22px}
+.total::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--rule-total);
+  background:linear-gradient(90deg,color-mix(in oklch,var(--ink) 44%,transparent),
+    color-mix(in oklch,var(--ink) 14%,transparent))}
+.total .lbl{font-size:var(--s-label);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.total .fig{grid-column:4;text-align:right;font-family:var(--font-display);
+  font-size:var(--s-total);line-height:1;color:var(--ink)}
+
+.cta{grid-column:4;justify-self:end;display:inline-flex;align-items:center;min-height:44px;
+  border:0;cursor:pointer;font-size:var(--s-small);font-weight:500;letter-spacing:.02em;
+  padding-top:12px;padding-bottom:12px;padding-left:20px;padding-right:20px;
+  border-radius:var(--radius-press);background:var(--cta-bg);color:var(--bg);
+  transition:filter var(--t-warm) var(--ease-ceramic)}
+.cta:hover{filter:brightness(1.06)}
+.foot{padding-top:20px;padding-bottom:40px}
+.foot::after{display:none}
+.foot a{display:inline-flex;align-items:center;min-height:44px;color:var(--muted);text-decoration:none;
+  border-bottom:var(--rule) solid color-mix(in oklch,var(--muted) 45%,transparent);
+  transition:color var(--t-warm) var(--ease-ceramic)}
+.foot a:hover{color:var(--ink)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;
+  border-radius:var(--radius-focus);color:var(--ink)}
+
+/* tempo slow: the page is revealed, one entry at a time, and nothing slides */
+.entry,.hero,.colhead,.act,.total,.foot{animation:lightup var(--t-settle) var(--ease-ceramic) both;
+  animation-delay:calc(var(--i,0) * 55ms + var(--silence))}
+@keyframes lightup{from{opacity:0}to{opacity:1}}
+
+@media (max-width:860px){
+  :root{--rail:56px;--col-time:44px;--col-amount:62px;--gap-col:12px;--edge:16px;
+    --s-h2:19px;--s-total:32px;--s-amount:15px}
+  .mark{writing-mode:vertical-rl;transform:rotate(180deg);padding-left:0;justify-self:center}
+  .tabs{margin-top:8vh}
+  .tabs a{writing-mode:vertical-rl;padding-left:0;min-width:44px;min-height:112px;
+    justify-content:center;letter-spacing:.14em;
+    border-top:none;border-left:var(--rule) solid color-mix(in oklch,var(--ink) 13%,transparent)}
+  .folio{writing-mode:vertical-rl;padding-left:0;justify-self:center}
+  .book::before{display:none}
+  .book::after{right:calc(var(--edge) + var(--col-amount) + 6px)}
+  .row{grid-template-columns:var(--col-time) minmax(0,1fr) var(--col-amount);align-items:start}
+  .n{grid-column:2;padding-top:6px}
+  .a,.total .fig{grid-column:3}
+  .cta{grid-column:2/4;white-space:nowrap;padding-left:16px;padding-right:16px}
+  .colhead .n{display:none}
+  .lede{font-size:15px}
+  .shell::before{width:100vw;height:300px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  /* the twin: the lamp is already at full, the beam is held, every entry is lit */
+  .shell::before{opacity:.58;filter:blur(34px)}
+  .entry,.hero,.colhead,.act,.total,.foot{opacity:1}
+  .row::after{background:linear-gradient(90deg,
+    color-mix(in oklch,var(--ink) calc(var(--lit-row,28) * 1.15%),transparent),
+    color-mix(in oklch,var(--ink) calc(var(--lit-row,28) * 0.76%),transparent))}
+  *,*::before,*::after{animation-duration:0s !important;transition-duration:0s !important}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <nav class="rail" aria-label="Sections">
+    <p class="mark">Carryover</p>
+    <div class="tabs">
+      <a href="#page">The page</a>
+      <a href="#arrives">What arrives</a>
+    </div>
+    <p class="folio">01/01</p>
+  </nav>
+
+  <main class="book" id="page">
+
+    <div class="row blank" style="--lit-row:26" aria-hidden="true"></div>
+
+    <div class="row hero" style="--lit-row:34">
+      <time class="t">6:40</time>
+      <div>
+        <h1>What last night has left&nbsp;you.</h1>
+        <p class="lede">Carryover writes one page while you sleep. You read it before the shop opens.</p>
+      </div>
+      <div></div>
+      <span class="a">0:00</span>
+    </div>
+
+    <div class="row blank" style="--lit-row:30" aria-hidden="true"></div>
+    <div class="row blank" style="--lit-row:29" aria-hidden="true"></div>
+    <div class="row blank" style="--lit-row:28" aria-hidden="true"></div>
+
+    <div class="row act" style="--i:1;--lit-row:27">
+      <div></div>
+      <div></div>
+      <div></div>
+      <button class="cta" type="button">Open a folio</button>
+    </div>
+
+    <div class="row blank" style="--lit-row:26" aria-hidden="true"></div>
+    <div class="row blank" style="--lit-row:26" aria-hidden="true"></div>
+    <div class="row blank" style="--lit-row:25" aria-hidden="true"></div>
+    <div class="row blank" style="--lit-row:25" aria-hidden="true"></div>
+    <div class="row blank" style="--lit-row:24" aria-hidden="true"></div>
+    <div class="row blank" style="--lit-row:24" aria-hidden="true"></div>
+    <div class="row blank" style="--lit-row:24" aria-hidden="true"></div>
+
+    <div class="row colhead" style="--i:2;--lit-row:26">
+      <span>Time</span><span>Entry</span><span class="n">Particulars</span><span class="a">Quiet</span>
+    </div>
+
+    <div class="row entry" style="--i:3;--lit-row:25">
+      <time class="t">6:44</time>
+      <div><h2>The night is already&nbsp;sorted.</h2><p class="sub">You open one page and it ends.</p></div>
+      <p class="n">Every arrival sits in the order it happened. Nothing is sorted by&nbsp;cleverness.</p>
+      <span class="a">0:04</span>
+    </div>
+
+    <div class="row entry" style="--i:4;--lit-row:24">
+      <time class="t">6:51</time>
+      <div><h2>Two lines need&nbsp;you.</h2><p class="sub">The rest is told to you&nbsp;once.</p></div>
+      <p class="n">The page marks what needs a decision. Everything else is filed.</p>
+      <span class="a">0:11</span>
+    </div>
+
+    <div class="row entry" style="--i:5;--lit-row:24">
+      <time class="t">6:59</time>
+      <div><h2>Nothing is lost at the&nbsp;foot.</h2><p class="sub">What you leave is brought&nbsp;forward.</p></div>
+      <p class="n">An unanswered line moves to tomorrow in the same words.</p>
+      <span class="a">0:19</span>
+    </div>
+
+    <div class="row colhead" id="arrives" style="--i:6;--lit-row:26">
+      <span>Time</span><span>A page, as it arrives</span><span class="n">Particulars</span><span class="a">Items</span>
+    </div>
+
+    <div class="row entry" style="--i:7;--lit-row:24">
+      <time class="t">2:11</time>
+      <p>Order 4417 shipped</p>
+      <p class="n">Two items left the shelf you restocked on Tuesday.</p>
+      <span class="a">2</span>
+    </div>
+
+    <div class="row entry" style="--i:8;--lit-row:23">
+      <time class="t">3:40</time>
+      <p>A wholesaler wrote back</p>
+      <p class="n">She asks whether the March order still stands.</p>
+      <span class="a">1</span>
+    </div>
+
+    <div class="row entry" style="--i:9;--lit-row:23">
+      <time class="t">4:02</time>
+      <p>Below the reorder line</p>
+      <p class="n">Fourteen work shirts are left and four went overnight.</p>
+      <span class="a">1</span>
+    </div>
+
+    <div class="row entry" style="--i:10;--lit-row:23">
+      <time class="t">4:18</time>
+      <p>Everything else</p>
+      <p class="n">Nine arrivals are stated once and filed.</p>
+      <span class="a">9</span>
+    </div>
+
+    <div class="row colhead" style="--i:11;--lit-row:25">
+      <span>Time</span><span>What the page says</span><span class="n">Particulars</span><span class="a">Line</span>
+    </div>
+
+    <div class="row entry" style="--i:12;--lit-row:23">
+      <time class="t">5:02</time>
+      <p data-state="empty">Nothing has asked for you&nbsp;yet.</p>
+      <p class="n">The page you open on a quiet night.</p>
+      <span class="a">0</span>
+    </div>
+
+    <div class="row entry" style="--i:13;--lit-row:23">
+      <time class="t">5:12</time>
+      <p data-state="loading">Counting what came in overnight.</p>
+      <p class="n">It holds for a moment and then it is written.</p>
+      <span class="a">0</span>
+    </div>
+
+    <div class="row entry" style="--i:14;--lit-row:22">
+      <time class="t">5:24</time>
+      <p data-state="error">The count stopped at 5:02. Open the ledger and it starts&nbsp;again.</p>
+      <p class="n">The next move is in the same line.</p>
+      <span class="a">0</span>
+    </div>
+
+    <div class="row entry" style="--i:15;--lit-row:22">
+      <time class="t">5:31</time>
+      <p data-state="offline">Nothing since 4:12. Whatever arrives will&nbsp;wait.</p>
+      <p class="n">The shop keeps its own time.</p>
+      <span class="a">0</span>
+    </div>
+
+    <div class="row entry" style="--i:16;--lit-row:22">
+      <time class="t">5:47</time>
+      <p data-state="done">That was all of it.</p>
+      <p class="n">The last line of the page, most mornings.</p>
+      <span class="a">0</span>
+    </div>
+
+    <div class="row entry" style="--i:17;--lit-row:22">
+      <time class="t">6:02</time>
+      <p data-state="first-run">This page is empty until tomorrow morning.</p>
+      <p class="n">You sign up tonight and read the first one at six.</p>
+      <span class="a">0</span>
+    </div>
+
+    <div class="row entry" style="--i:18;--lit-row:22">
+      <time class="t">7:04</time>
+      <div><h2>It is nine dollars a&nbsp;month.</h2><p class="sub">One shop, one page a&nbsp;day.</p></div>
+      <p class="n">Thirty days before the first charge. Your pages export whenever you leave.</p>
+      <span class="a">0:24</span>
+    </div>
+
+    <div class="row total" style="--i:19">
+      <time class="t">7:06</time>
+      <span class="lbl">Carried forward</span>
+      <div></div>
+      <span class="fig">0:26</span>
+    </div>
+
+    <div class="row foot" style="--i:20">
+      <time class="t">7:07</time>
+      <p class="n">Made by two people in Providence. Written replies, most days by noon.</p>
+      <p class="n"><a href="#arrives">Read a sample page</a></p>
+      <span class="a">01</span>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

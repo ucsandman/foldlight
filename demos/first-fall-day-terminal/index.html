@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fortyeight, a colour scheme for a terminal and an editor</title>
+<meta name="description" content="A terminal and editor colour scheme of five sampled roles and four syntax colours, on a 28px pitch.">
+<link rel="stylesheet" href="tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Datatype:wdth,wght@50..150,100..900&display=swap">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  button, input, select, textarea { font: inherit; }
+
+  :root {
+    --rule-1: color-mix(in oklch, var(--muted) 34%, transparent);
+    --rule-2: color-mix(in oklch, var(--muted) 22%, transparent);
+    --rule-3: color-mix(in oklch, var(--muted) 14%, transparent);
+    --s-display: clamp(2.75rem, 7vw, 6.25rem);
+    --s-h2: 20px;
+    --s-body: 16px;
+    --s-pane: 14px;
+    --s-meta: 13px;
+    --pad: 56px;
+  }
+
+  html { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--s-body);
+    line-height: var(--pitch);
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* the lamp: one fixed radial at the sampled origin, plus the one continuous rule */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 50% at var(--source-x) var(--source-y),
+      color-mix(in oklch, var(--accent) 12%, transparent), transparent 70%);
+  }
+  /* one grain layer, document level */
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    opacity: var(--grain); mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+  }
+
+  .page { position: relative; z-index: 2; padding: 84px var(--pad) 84px; }
+  .band { display: grid; grid-template-columns: minmax(0, 1fr) var(--margin-col); gap: var(--gap); align-items: start; }
+  .rule { position: absolute; top: 0; bottom: 0; left: calc(66% - 46px); width: 1px; background: var(--rule-2); }
+
+  h1, h2 { font-family: var(--font-display); font-weight: 500; margin: 0; }
+  h1 { font-size: var(--s-display); line-height: 1.02; letter-spacing: -0.015em; max-width: 12ch; }
+  h2 { font-size: var(--s-h2); line-height: var(--pitch); color: var(--ink); }
+  p { margin: 0; }
+
+  .mark { font-size: var(--s-meta); letter-spacing: 0.22em; color: var(--muted); }
+  .lede { font-size: var(--s-body); max-width: 42ch; color: var(--ink); }
+  .meta { font-size: var(--s-meta); color: var(--muted); }
+
+  /* the opening: the fold. The one lit row sits low, where the light reaches it. */
+  .open { min-height: 744px; }
+  .open .mark { margin-bottom: 84px; }
+  .open h1 { margin-bottom: 28px; }
+  .open .lede { margin-bottom: 252px; }
+
+  pre { margin: 0; font-family: var(--font-body); font-size: var(--s-pane); line-height: var(--pitch); white-space: pre; overflow-x: auto; }
+  b, i { font-weight: inherit; font-style: normal; }
+  .k { color: var(--syn-cold); }
+  .s { color: var(--syn-steel); }
+  .n { color: var(--syn-board); }
+  .c { color: var(--syn-shade); }
+  .a { color: var(--accent); }
+  .d { color: var(--muted); }
+
+  /* the signature: one row on the whole page is lit, and the light reaches it from the lamp side */
+  .cmd {
+    padding: 14px 0 14px 40px; border-bottom: 1px solid var(--rule-3);
+    position: relative; color: var(--ink); max-width: 46ch; font-size: var(--s-body);
+    background: var(--surface); box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .cmd::before { content: "~ %"; position: absolute; left: 12px; top: 14px; color: var(--accent); }
+  .cmd::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--rule-1)); }
+
+  /* the margin: metadata, offset from the body grid, never aligned with it */
+  .margin { padding-top: 14px; text-align: right; }
+  .status { font-size: var(--s-meta); color: var(--muted); text-align: right; white-space: pre; }
+  .note {
+    font-size: var(--s-meta); color: var(--muted); text-align: right;
+    margin: 42px 0 0 -34px; padding: 0 0 0 34px; background: var(--bg);
+  }
+  .note.off { margin-top: 14px; }
+
+  a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule-1); }
+  a:hover { color: var(--accent); }
+  a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .action {
+    display: inline-block; margin-top: 42px; padding: 7px 18px;
+    background: var(--accent); color: var(--bg); border-bottom: 0;
+    font-size: var(--s-meta); letter-spacing: 0.08em;
+    transition: background-color var(--transient) var(--curve), color var(--transient) var(--curve);
+  }
+  .action:hover { background: var(--ink); color: var(--bg); }
+
+  section { margin-top: 112px; }
+  section h2 { margin-bottom: 28px; }
+
+  /* two panes, one pitch */
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .pane { border-top: 1px solid var(--rule-1); }
+  .pane + .pane { border-left: 1px solid var(--rule-3); padding-left: 27px; }
+  .paneh { font-size: var(--s-meta); color: var(--muted); padding: 7px 0 7px; letter-spacing: 0.18em; border-bottom: 1px solid var(--rule-3); }
+  .buffer { padding-top: 14px; }
+  .lit { background: var(--surface); box-shadow: inset 3px 0 0 var(--accent); color: var(--ink); display: block; padding-left: 9px; margin-left: -12px; }
+
+  .roles { color: var(--muted); font-size: var(--s-pane); }
+  .roles b { display: inline-block; width: 24px; height: 9px; vertical-align: middle; }
+  .roles i { color: var(--ink); }
+
+  .state { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 0 28px; font-size: var(--s-body); color: var(--ink); border-top: 1px solid var(--rule-3); padding: 7px 0; }
+  .state::before { content: attr(data-state); color: var(--muted); font-size: var(--s-meta); }
+  .state:first-of-type { border-top: 1px solid var(--rule-1); }
+
+  .files { display: grid; gap: 0; }
+  .files a { display: block; padding: 7px 0; border-bottom: 1px solid var(--rule-3); max-width: 46ch; }
+  .files a:first-child { border-top: 1px solid var(--rule-3); }
+
+  .index { margin-top: 112px; border-top: 1px solid var(--rule-1); padding-top: 14px; display: flex; gap: 28px; flex-wrap: wrap; }
+  .index a { border-bottom: 0; font-size: var(--s-meta); color: var(--muted); letter-spacing: 0.18em; padding: 10px 0; min-height: 44px; display: inline-flex; align-items: center; }
+  .index a:hover { color: var(--ink); }
+  .foot { margin-top: 28px; font-size: var(--s-meta); color: var(--muted); }
+
+  @media (max-width: 860px) {
+    :root { --pad: 20px; --s-h2: 18px; --s-body: 15px; --s-pane: 12px; --s-meta: 12px; }
+    .page { padding: 42px var(--pad) 56px; }
+    .open { min-height: 0; }
+    .cmd { padding-left: 34px; }
+    .cmd::before { left: 10px; }
+    .band { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .rule { display: none; }
+    .margin { padding-top: 0; }
+    .note { margin: 28px 0 0 0; padding: 0; }
+    .note.off { margin-top: 28px; }
+    .open .mark { margin-bottom: 42px; }
+    .open .lede { margin-bottom: 28px; }
+    .pair { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .pane + .pane { border-left: 0; padding-left: 0; margin-top: 28px; }
+    section { margin-top: 56px; }
+    .index { margin-top: 56px; }
+    .state { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* the twin: the light is already on the line it belongs to and does not travel */
+    .action { transition: none; background: var(--ink); color: var(--bg); }
+    .lit { background: var(--surface); box-shadow: inset 3px 0 0 var(--accent); }
+    body::before { background: radial-gradient(ellipse 60% 50% at var(--source-x) var(--source-y),
+      color-mix(in oklch, var(--accent) 10%, transparent), transparent 70%); }
+    a:hover { color: var(--ink); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="rule"></div>
+
+  <div class="band open">
+    <main>
+      <p class="mark" data-role="wordmark">Fortyeight</p>
+      <h1>One line is lit.</h1>
+      <p class="lede">The rest of the page sits in shade until we move. We took five colours out of one cold morning and kept every one.</p>
+      <pre class="cmd">fortyeight install --target terminal</pre>
+    </main>
+
+    <aside class="margin">
+<pre class="status">key light at 3 o'clock
+3200 K
+frame lit 18 percent
+grain 0.055
+row pitch 28 px on every pane
+margin 34 %
+gutter 56 px, five roles sampled
+syntax colours 4
+cursor and selection take the accent
+accent 4.98
+text 10.1 on the ground
+8.5 on the panel
+key angle 354 deg, one direction
+display 100 px
+source at 96 percent, 45 down
+body 16 px
+pane 14 px, margin note 13 px
+one lit row
+three files, one scheme
+nine values
+</pre>
+      <p class="note">We sampled this at 8am on a Saturday at 48 degrees.</p>
+      <a class="action" href="#files">Install</a>
+    </aside>
+  </div>
+
+  <section id="panes" class="band">
+    <div>
+      <h2>Both panes run on one pitch.</h2>
+      <div class="pair">
+        <div class="pane">
+          <p class="paneh">session</p>
+<pre class="buffer"><b class="a">~ %</b> fortyeight check
+<b class="d">  reading the roles from</b> <b class="n">tokens.css</b>
+<b class="d">  5 roles, 4 syntax colours</b>
+<b class="d">  contrast floor</b> <b class="k">4.5</b> <b class="d">to 1, clear</b>
+<b class="a">~ %</b> fortyeight install <b class="k">--target</b> <b class="n">wt</b>
+<b class="d">  wrote</b> <b class="n">Fortyeight.json</b>
+<b class="a">~ %</b> <b class="lit">_</b>
+</pre>
+        </div>
+        <div class="pane">
+          <p class="paneh">buffer</p>
+<pre class="buffer"><b class="c">41</b>  <b class="k">:root</b> {
+<b class="c">42</b>    <b class="s">--bg</b>: <b class="n">oklch(0.124 0.007 87)</b>;
+<b class="c">43</b>    <b class="s">--ink</b>: <b class="n">oklch(0.781 0.065 84)</b>;
+<b class="lit"><b class="c">44</b>    <b class="s">--accent</b>: <b class="n">oklch(0.594 0.076 85)</b>;</b>
+<b class="c">45</b>    <b class="s">--pitch</b>: <b class="n">28px</b>;
+<b class="c">46</b>  }
+<b class="c">47</b>
+</pre>
+        </div>
+      </div>
+    </div>
+    <aside class="margin">
+      <p class="note">Every line sits 28 px from the line above it.</p>
+      <p class="note off">The cursor line is the only lit row on screen.</p>
+    </aside>
+  </section>
+
+  <section id="colours" class="band">
+    <div>
+      <h2>Five roles come out of one light.</h2>
+<pre class="roles"><b style="background:#070604"></b>  <i>--bg      </i> oklch(0.124 0.007 87)  the ground in shade
+<b style="background:#231b0a"></b>  <i>--surface </i> oklch(0.228 0.032 85)  the lit band on wet ground
+<b style="background:#cbb588"></b>  <i>--ink     </i> oklch(0.781 0.065 84)  the face of the light
+<b style="background:#937b47"></b>  <i>--accent  </i> oklch(0.594 0.076 85)  the hottest part of it
+<b style="background:#938568"></b>  <i>--muted   </i> oklch(0.621 0.045 84)  the shade it does not reach
+<b style="background:#7ba2c1"></b>  <i>--syn-cold</i> oklch(0.695 0.062 242) the sky above the roof line
+<b style="background:#acb2b9"></b>  <i>--syn-stee</i> oklch(0.760 0.012 250) the steel clip on the cover
+<b style="background:#a19c87"></b>  <i>--syn-boar</i> oklch(0.690 0.030 96)  the grey board of the cover
+<b style="background:#938568"></b>  <i>--syn-shad</i> oklch(0.621 0.045 84)  the same shade, for comments
+</pre>
+    </div>
+    <aside class="margin">
+      <p class="note">The chips are sampled values, not a picked palette.</p>
+    </aside>
+  </section>
+
+  <section id="states" class="band">
+    <div>
+      <h2>The six states carry the same voice.</h2>
+      <p class="state" data-state="empty">Nothing is open in this pane yet.</p>
+      <p class="state" data-state="loading">The buffer is on its way.</p>
+      <p class="state" data-state="error">The theme file stops at line 41 and we read it again from there.</p>
+      <p class="state" data-state="offline">We work from the copy on this machine.</p>
+      <p class="state" data-state="done">Every pane carries the same five colours now.</p>
+      <p class="state" data-state="first-run">One line is lit and the rest sits in shade.</p>
+    </div>
+    <aside class="margin">
+      <p class="note">We wrote these six lines before the page existed.</p>
+    </aside>
+  </section>
+
+  <section id="files" class="band">
+    <div>
+      <h2>The scheme goes into three files.</h2>
+      <div class="files">
+        <a href="fortyeight.windowsterminal.json" download>Windows Terminal scheme</a>
+        <a href="fortyeight.iterm.json" download>iTerm2 scheme</a>
+        <a href="fortyeight-color-theme.json" download>VS Code theme</a>
+      </div>
+      <nav class="index">
+        <a href="#panes">panes</a>
+        <a href="#colours">colours</a>
+        <a href="#states">states</a>
+        <a href="#files">files</a>
+      </nav>
+      <p class="foot">We keep the same five colours in every pane.</p>
+    </div>
+    <aside class="margin">
+      <p class="note">Every file carries the same nine values, in its own keys.</p>
+    </aside>
+  </section>
+</div>
+</body>
+</html>

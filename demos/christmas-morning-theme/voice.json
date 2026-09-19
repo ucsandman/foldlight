@@ -1,0 +1,16 @@
+{
+  "brand": "Foolscap",
+  "person": "second",
+  "volume": "quiet",
+  "median": [5, 9],
+  "ceiling": 14,
+  "headlineWords": 8,
+  "clauseCap": 1,
+  "props": [
+    "christmas", "tree", "star", "gift", "snowflake", "seasonal", "holiday",
+    "red and green", "mug", "cup", "coffee", "lamp", "steam", "wool", "sock",
+    "floorboard", "filament"
+  ],
+  "states": ["empty", "loading", "error", "offline", "done", "first-run"],
+  "labelCase": "sentence"
+}

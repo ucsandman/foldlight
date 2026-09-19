@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ashford and Loom, product register</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Commissioner:wght@100..900&display=swap">
+<style>
+/* Foldlight: first coffee, 6:40am, house asleep. fold: ledger, surface: dashboard. */
+/* motion score: verb reveal, travel 1px, transient 90ms ceramic, transport 5.5bpm, resolve once */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --rail: 146px;
+  --c1: 76px;
+  --c3: 300px;
+  --c4: 168px;
+  --gap: 28px;
+  --pad-l: 36px;
+  --pad-r: 40px;
+
+  --t-display: 76px;
+  --t-figure: 26px;
+  --t-body: 15px;
+  --t-micro: 12px;
+
+  --rule: color-mix(in oklch, var(--muted) 32%, transparent);
+  --surface-lit: oklch(0.273 0.034 72);
+  --lit-row: 20;
+
+  /* status, semantic, sampled inside the lamp band (hue 52 to 75, chroma at or under accent) */
+  --held: var(--muted);
+  --thin: oklch(0.72 0.098 62);
+  --under: oklch(0.84 0.090 54);
+  --act: color-mix(in oklch, var(--accent) 58%, var(--ink) 42%);
+
+  /* the material curve: glazed ceramic, hard attack, dead stop */
+  --ceramic: cubic-bezier(.18,.92,.14,1);
+}
+
+html { font-size: 16px; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea { font: inherit; }
+
+/* the one lamp, at the sampled origin */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 50% at var(--source-x) var(--source-y),
+    color-mix(in oklch, var(--accent) 12%, transparent), transparent 70%);
+  animation: lamp 420ms var(--ceramic) 300ms 1 both;
+}
+
+/* one grain layer, document level */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--grain);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
+@keyframes lamp { from { opacity: 0.55; } to { opacity: 1; } }
+
+.page {
+  position: relative;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* ---------------------------------------------------------------- the rail */
+.rail {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--rule);
+}
+
+.mark {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--t-body);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 24px 12px;
+  height: 72px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.tab {
+  display: block;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 14px 18px;
+  min-height: 48px;
+  border-bottom: 1px solid var(--rule);
+  transition: color 400ms var(--ceramic);
+}
+
+.tab:hover { color: var(--ink); }
+
+.tab.is-on {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.rail-foot { margin-top: auto; }
+
+.signed {
+  display: block;
+  color: var(--muted);
+  font-size: var(--t-micro);
+  padding: 18px;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------- the book */
+.book {
+  position: relative;
+  padding: 0 var(--pad-r) 0 var(--pad-l);
+}
+
+/* the two continuous verticals: borders only, so they never paint a panel */
+.vrule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px solid var(--rule);
+  pointer-events: none;
+}
+
+.vrule-a { left: calc(var(--pad-l) + var(--c1) + (var(--gap) / 2)); }
+.vrule-b { right: calc(var(--pad-r) + var(--c4) + (var(--gap) / 2)); }
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--c1) minmax(0, 1fr) var(--c3) var(--c4);
+  column-gap: var(--gap);
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  transition: color 400ms var(--ceramic);
+}
+
+/* the lit ruling: every rule is light, brightest at the lamp side */
+.row::after,
+tr::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    color-mix(in oklch, var(--ink) calc(var(--lit-row) * 1%), transparent),
+    color-mix(in oklch, var(--ink) calc(var(--lit-row) * 0.28%), transparent) 100%);
+}
+
+.row:hover, .row:focus-within { --lit-row: 42; }
+
+.lit-1 { --lit-row: 34; } .lit-2 { --lit-row: 30; } .lit-3 { --lit-row: 27; }
+.lit-4 { --lit-row: 24; } .lit-5 { --lit-row: 22; } .lit-6 { --lit-row: 21; }
+.lit-7 { --lit-row: 20; } .lit-8 { --lit-row: 19; } .lit-9 { --lit-row: 18; }
+
+.t { color: var(--muted); font-size: var(--t-body); }
+.p { color: var(--muted); margin: 0; }
+.amount { text-align: right; }
+.fig { font-size: var(--t-figure); line-height: 1.1; }
+.note { color: var(--muted); font-size: var(--t-micro); display: block; }
+
+/* ---------------------------------------------------------------- the opening */
+.opening { min-height: calc(100vh + 20px); }
+
+.mark-row { height: 72px; padding: 24px 0; }
+
+.open-row { height: 300px; padding: 24px 0; align-items: start; }
+
+.carry-row { height: 88px; }
+
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--t-display);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.blank { height: 45px; padding: 0; }
+
+/* ---------------------------------------------------------------- entries */
+h2 {
+  font-size: var(--t-body);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.head-row .t, .head-row .p, .head-row .amount, .head-row h2 {
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.entry-title { font-weight: 500; }
+
+.total { border-bottom: 0; padding-top: 18px; }
+
+.double {
+  height: 3px;
+  border-top: 2px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ---------------------------------------------------------------- the register table */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+tr { position: relative; }
+
+th, td {
+  text-align: left;
+  font-weight: 400;
+  padding: 12px var(--gap) 12px 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: baseline;
+}
+
+thead th {
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.col-code { width: calc(var(--c1) + var(--gap)); }
+.col-status { width: calc(var(--c3) + var(--gap)); }
+.col-onhand { width: var(--c4); }
+
+td.code { font-size: var(--t-micro); color: var(--muted); }
+td.status { color: var(--muted); font-size: var(--t-micro); }
+td.onhand, th.onhand { text-align: right; padding-right: 0; }
+
+.s-held { color: var(--held); }
+.s-thin { color: var(--thin); }
+.s-under { color: var(--under); }
+
+/* ---------------------------------------------------------------- the chart */
+.chart { display: block; width: 100%; height: 112px; margin: 10px 0 0; }
+.chart .out { fill: none; stroke: var(--thin); stroke-width: 1.5; }
+.chart .in { fill: none; stroke: var(--held); stroke-width: 1.5; }
+.chart .axis { fill: none; stroke: var(--rule); stroke-width: 1.5; }
+.key { color: var(--muted); font-size: var(--t-micro); }
+
+/* ---------------------------------------------------------------- the last entry */
+.act {
+  border: 0;
+  border-radius: 6px;
+  background: var(--act);
+  color: var(--bg);
+  font-weight: 600;
+  padding: 14px 18px;
+  min-height: 48px;
+  cursor: pointer;
+  box-shadow: 7.99px -0.42px 8px color-mix(in oklch, var(--bg) 72%, transparent);
+  transition: filter 400ms var(--ceramic);
+}
+
+.act:hover { filter: brightness(1.06); }
+
+a:focus, button:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- 390 */
+@media (max-width: 760px) {
+  :root {
+    --rail: 96px;
+    --c1: 34px;
+    --c3: 0px;
+    --c4: 72px;
+    --gap: 10px;
+    --pad-l: 12px;
+    --pad-r: 12px;
+    --t-display: 30px;
+    --t-figure: 17px;
+    --rule: color-mix(in oklch, var(--muted) 62%, transparent);
+  }
+  .row { grid-template-columns: var(--c1) minmax(0, 1fr) var(--c4); }
+  .open-row > .entry { grid-column: 2 / 4; }
+  .row > .t { grid-column: 1; grid-row: 1; }
+  .row > .entry { grid-column: 2; grid-row: 1; }
+  .row > .amount { grid-column: 3; grid-row: 1; }
+  .row > .p { grid-column: 2 / 4; grid-row: 2; padding-top: 10px; }
+  .head-row > .p { display: none; }
+  .open-row { height: auto; }
+  .opening { min-height: 0; }
+  .blank { height: 40px; }
+  .vrule-b { right: calc(var(--pad-r) + var(--c4) + (var(--gap) / 2)); }
+  .col-code { width: 52px; }
+  .col-status { width: 78px; }
+  .col-onhand { width: 52px; }
+  .mark { padding: 24px 12px; }
+  .tab { padding: 14px 12px; }
+}
+
+/* the twin: the lamp is already at full, every ruling is lit, nothing crosses the room */
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation-duration: 0s; opacity: 1; }
+  .row, .tab, .act { transition-duration: 0s; }
+  .row { --lit-row: 30; }
+  .act { filter: brightness(1.04); }
+  .tab { color: var(--ink); }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="rail" aria-label="Register sections">
+    <span class="mark" data-role="wordmark">Ashford &amp; Loom</span>
+    <a class="tab is-on" href="#register" aria-current="page">Register</a>
+    <a class="tab" href="#orders">Purchase orders</a>
+    <a class="tab" href="#overnight">Overnight</a>
+    <p class="signed rail-foot">Signed in as<br>Rae Ashford</p>
+  </nav>
+
+  <main class="book">
+    <div class="vrule vrule-a"></div>
+    <div class="vrule vrule-b"></div>
+
+    <section class="opening">
+      <div class="row mark-row lit-1"></div>
+
+      <div class="row open-row lit-2">
+        <span class="t">6:40</span>
+        <div class="entry">
+          <h1>The floor<br>stayed quiet<br>overnight.</h1>
+        </div>
+      </div>
+
+      <div class="row blank lit-3"></div>
+      <div class="row blank lit-4"></div>
+      <div class="row blank lit-5"></div>
+      <div class="row blank lit-6"></div>
+      <div class="row blank lit-7"></div>
+      <div class="row blank lit-8"></div>
+      <div class="row blank lit-9"></div>
+      <div class="row blank lit-9"></div>
+      <div class="row blank lit-9"></div>
+      <div class="row blank lit-9"></div>
+
+      <div class="row carry-row lit-2">
+        <span class="t"></span>
+        <div class="entry"></div>
+        <p class="p">Units on hand, counted before you opened.</p>
+        <div class="amount"><span class="fig">12,480</span></div>
+      </div>
+    </section>
+
+    <section id="register">
+      <div class="row head-row lit-3">
+        <span class="t">Time</span>
+        <div class="entry"><h2>Entry</h2></div>
+        <p class="p">Particulars</p>
+        <div class="amount">Amount</div>
+      </div>
+
+      <div class="row lit-4">
+        <span class="t">6:12</span>
+        <div class="entry"><span class="entry-title">Units on hand</span></div>
+        <p class="p">Counted across 214 active lines.</p>
+        <div class="amount"><span class="fig">12,480</span></div>
+      </div>
+
+      <div class="row lit-5">
+        <span class="t">6:18</span>
+        <div class="entry"><span class="entry-title">Open purchase orders</span></div>
+        <p class="p">Three of these land this week.</p>
+        <div class="amount"><span class="fig">7</span></div>
+      </div>
+
+      <div class="row lit-6">
+        <span class="t">6:24</span>
+        <div class="entry"><span class="entry-title">Below reorder point</span></div>
+        <p class="p">One line is under a week of cover.</p>
+        <div class="amount"><span class="fig s-thin">4</span></div>
+      </div>
+
+      <div class="row lit-7">
+        <span class="t">6:31</span>
+        <div class="entry"><span class="entry-title">Inventory value</span></div>
+        <p class="p">Valued at last cost, before today.</p>
+        <div class="amount"><span class="fig">$184,600</span></div>
+      </div>
+
+      <div class="double"></div>
+
+      <div class="row total lit-8">
+        <span class="t">6:40</span>
+        <div class="entry"><span class="entry-title">Carried forward</span></div>
+        <p class="p">Units on hand plus what you have coming.</p>
+        <div class="amount"><span class="fig">13,320</span></div>
+      </div>
+
+      <div class="row head-row lit-9">
+        <span class="t">Line</span>
+        <div class="entry"><h2>Register</h2></div>
+        <p class="p">214 lines, sorted by category.</p>
+        <div class="amount">On hand</div>
+      </div>
+
+      <table>
+        <colgroup>
+          <col class="col-code">
+          <col>
+          <col class="col-status">
+          <col class="col-onhand">
+        </colgroup>
+        <thead>
+          <tr class="lit-9">
+            <th scope="col">Line</th>
+            <th scope="col">Product</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="onhand">On hand</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="lit-9">
+            <td class="code">HG-2201</td>
+            <td>Stoneware serving bowl, 9in</td>
+            <td class="status">In stock, reorder at 150.</td>
+            <td class="onhand s-held">340</td>
+          </tr>
+          <tr class="lit-9">
+            <td class="code">HG-1187</td>
+            <td>Waffle hand towel, charcoal</td>
+            <td class="status">Low stock, reorder at 100.</td>
+            <td class="onhand s-thin">62</td>
+          </tr>
+          <tr class="lit-9">
+            <td class="code">HG-3390</td>
+            <td>Maple cutting board, 14in</td>
+            <td class="status">In stock, reorder at 80.</td>
+            <td class="onhand s-held">210</td>
+          </tr>
+          <tr class="lit-9">
+            <td class="code">HG-0765</td>
+            <td>Cast iron trivet, 7in</td>
+            <td class="status">Under the point, reorder at 40.</td>
+            <td class="onhand s-under">18</td>
+          </tr>
+          <tr class="lit-9">
+            <td class="code">HG-4410</td>
+            <td>Linen table runner, natural</td>
+            <td class="status">In stock, reorder at 60.</td>
+            <td class="onhand s-held">95</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="row lit-9">
+        <span class="t">7d</span>
+        <div class="entry">
+          <h2>Movement</h2>
+          <svg class="chart" viewBox="0 0 590 112" preserveAspectRatio="none" role="img"
+               aria-label="Units out and units in, each of the last seven days">
+            <polyline class="axis" points="0,111 590,111"></polyline>
+            <polyline class="out" points="0,62 98,74 196,55 295,40 393,58 491,46 590,33"></polyline>
+            <polyline class="in" points="0,88 98,92 196,84 295,96 393,80 491,90 590,86"></polyline>
+          </svg>
+          <span class="key">Units out above, units in below.</span>
+        </div>
+        <p class="p" data-state="loading">Counting what moved in overnight.</p>
+        <div class="amount"><span class="fig">5,430</span></div>
+      </div>
+
+      <div class="row lit-9">
+        <span class="t">6:40</span>
+        <div class="entry">
+          <span class="entry-title">Reorder queue</span>
+          <span class="note" data-state="empty">Nothing is waiting on you yet.</span>
+        </div>
+        <p class="p">Four lines sit under the reorder point.</p>
+        <div class="amount"><span class="fig">0</span></div>
+      </div>
+    </section>
+
+    <section id="orders">
+      <div class="row head-row lit-9">
+        <span class="t">Due</span>
+        <div class="entry"><h2>Arrivals</h2></div>
+        <p class="p">Booked against open orders.</p>
+        <div class="amount">Units</div>
+      </div>
+
+      <div class="row lit-9">
+        <span class="t">9:30</span>
+        <div class="entry"><span class="entry-title">Kettleman Clay, two pallets</span></div>
+        <p class="p">Two pallets booked against order 4417.</p>
+        <div class="amount"><span class="fig">480</span></div>
+      </div>
+
+      <div class="row lit-9">
+        <span class="t">14:00</span>
+        <div class="entry"><span class="entry-title">Harlow Mills, one pallet</span></div>
+        <p class="p">One pallet booked against order 4402.</p>
+        <div class="amount"><span class="fig">360</span></div>
+      </div>
+
+      <div class="row lit-9">
+        <span class="t">Tue</span>
+        <div class="entry">
+          <span class="entry-title">Bell &amp; Court, first delivery</span>
+          <span class="note" data-state="first-run">The register starts keeping this page tomorrow.</span>
+        </div>
+        <p class="p">A new vendor, opened at last cost.</p>
+        <div class="amount"><span class="fig">0</span></div>
+      </div>
+    </section>
+
+    <section id="overnight">
+      <div class="row head-row lit-9">
+        <span class="t">Night</span>
+        <div class="entry"><h2>Overnight</h2></div>
+        <p class="p">What the register kept while you slept.</p>
+        <div class="amount">Lines</div>
+      </div>
+
+      <div class="row lit-9">
+        <span class="t">4:12</span>
+        <div class="entry"><span class="entry-title" data-state="offline">Nothing has arrived since 4:12. Whatever comes in will wait.</span></div>
+        <p class="p">The vendor feed went quiet.</p>
+        <div class="amount"><span class="fig">0</span></div>
+      </div>
+
+      <div class="row lit-9">
+        <span class="t">5:02</span>
+        <div class="entry"><span class="entry-title" data-state="error">The count stopped at 5:02. Open the register and it starts again.</span></div>
+        <p class="p">Two lines were left uncounted.</p>
+        <div class="amount"><span class="fig s-thin">2</span></div>
+      </div>
+
+      <div class="row lit-9">
+        <span class="t">6:38</span>
+        <div class="entry"><span class="entry-title" data-state="done">That was all of it.</span></div>
+        <p class="p">The count closed at 6:38.</p>
+        <div class="amount"><span class="fig">214</span></div>
+      </div>
+
+      <div class="row lit-9">
+        <span class="t">6:40</span>
+        <div class="entry"><span class="entry-title">Four lines sit under the reorder point.</span></div>
+        <p class="p">Two vendors can cover all four today.</p>
+        <div class="amount"><button class="act" type="button">Open a purchase order</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

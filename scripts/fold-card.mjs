@@ -126,7 +126,7 @@ const displaySize = Number(arg('size', 88));
 
 const token = (n) => { const m = css.match(new RegExp(`--${n}\\s*:\\s*([^;]+);`)); return m ? m[1].trim() : ''; };
 const band = (n) => { const m = css.match(new RegExp(`--${n}\\s*:[^;]*;\\s*/\\*\\s*([^*]+?)\\s*\\*/`)); return m ? m[1].trim() : ''; };
-const title = (css.match(/\/\*\s*Sense memory:\s*([^*]+?)\s*\*\//) || [])[1] || path.basename(src);
+const title = (css.match(/\/\*\s*Foldlight:\s*([^*]+?)\s*\*\//) || [])[1] || path.basename(src);
 const plateLine = (css.match(/\/\*\s*plate:\s*([^*]+?)\s*\*\//) || [])[1] || '';
 const foldLine = (css.match(/\/\*\s*fold:\s*([\w-]+)\s*\*\//) || [])[1] || '';
 const key = foldKey || foldLine || 'none';

@@ -1,0 +1,19 @@
+{
+  "title": "The first crisp morning, Saturday 8am, 48 degrees",
+  "prompt": "A single photograph. the one gold band of light across the wet walk, everything else in shade, pulling the sleeve over the hand before taking the cup. In frame: wet concrete walk in shade, dark grey with a cold cast, the one gold band the low sun lays across that wet concrete, a heather grey cotton fleece cuff pulled over the knuckles, black coffee in a plain grey cup, steam standing straight up off the cup and crossing the light, the grey board cover of a pocket book, dry paper, the brushed steel clip of a pen on that cover, the cold blue of the sky above the roofline, unlit. 35mm at 3m, f/8, camera level, horizon on the lower third; deep, everything sharp. One light only: the low sun itself, no diffusion, clearing the roofline to the right of the frame, from the right, 3200K. About 18 percent of the frame is lit; the rest falls to a deep neutral black that keeps its detail. Surfaces: no specular at all; a fine lit fuzz where the rim light grazes the fibres, deep micro shadow between them. a single anisotropic streak stretched along the brush direction. Shutter 1/500s. Shot on 35mm film at ISO 800: fine grain, no lifted shadows, no HDR, no colour grading beyond the lamp's own 3200K cast. Leave the left 40 percent of the frame in near darkness and empty. Nothing enters it. Out of frame but contributing light: a low broken band of small wet mirrored patches on the walk, throwing the key back up into the underside of the subject at 3200K, dim and fragmented. It is never visible, only felt on the far edge of the subject. No people's faces, no text, no logos, no props beyond what is listed.",
+  "negative": "any leaf, leaves or a leaf silhouette, orange and dun pairing, a pumpkin or a gourd, any seasonal word, any month, any harvest imagery, a knit scarf, a plaid blanket, tall rubber boots, red and green pairing, studio softbox, two light sources, colour gel, bokeh balls, glossy advertising retouch, text, watermark, illustration, CGI look",
+  "camera": {
+    "lens": "35mm",
+    "distance": "3m",
+    "fstop": "f/8",
+    "angle": "camera level, horizon on the lower third",
+    "dof": "deep, everything sharp",
+    "shutter": "1/500s"
+  },
+  "material": "wool",
+  "kelvin": 3200,
+  "keyClock": 3,
+  "litPct": 18,
+  "safeSide": "left",
+  "grain": 0.045
+}

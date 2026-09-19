@@ -1,6 +1,6 @@
 # Motion: one verb, a travel budget in pixels, and a twin that is a design
 
-Tempo and Sound are a score, not an adjective. The score is written into `docs/sense-memory.json`
+Tempo and Sound are a score, not an adjective. The score is written into `docs/foldlight.json`
 under `motion` and is enforced by `moment-lint` (`travel-budget`, `verb-property`,
 `twin-is-a-switch`, `overshoot-channel`) and by `craft-lint motion-twin` in its reduced-motion pass.
 

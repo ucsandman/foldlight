@@ -1,0 +1,20 @@
+{
+  "brand": "Wells Street Growers",
+  "person": "third",
+  "volume": "plain",
+  "median": [4, 7],
+  "ceiling": 11,
+  "headlineWords": 7,
+  "clauseCap": 1,
+  "props": ["gingham", "barn", "mason lid", "tomato", "chalk", "slate", "crate", "basil", "awning", "bag"],
+  "states": ["empty", "loading", "error", "offline", "done", "first-run"],
+  "stateStrings": {
+    "empty": "The first stall opens at nine.",
+    "loading": "The count is coming in.",
+    "error": "The count stopped at 9:14. One tap starts it again.",
+    "offline": "Nothing arrives until the signal returns.",
+    "done": "Everything on the roll is counted.",
+    "first-run": "Nothing is priced until Saturday."
+  },
+  "labelCase": "sentence"
+}

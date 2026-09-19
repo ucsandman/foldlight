@@ -1,0 +1,12 @@
+{
+  "brand": "Carryover",
+  "person": "second",
+  "volume": "quiet",
+  "median": [5, 9],
+  "ceiling": 14,
+  "headlineWords": 8,
+  "clauseCap": 1,
+  "props": ["christmas", "holiday", "season", "seasonal", "festive", "tree", "star", "gift", "snowflake", "mug", "cup", "coffee", "lamp", "steam", "wool", "sock", "ceramic"],
+  "states": ["empty", "loading", "error", "offline", "done", "first-run"],
+  "labelCase": "sentence"
+}

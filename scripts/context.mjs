@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Project probe for sense-memory. Prints a compact block the skill reads before step 1.
+// Project probe for foldlight. Prints a compact block the skill reads before step 1.
 // Never exits non-zero: a failing probe would abort the skill invocation.
 //
 //   node context.mjs [projectDir]
@@ -27,7 +27,7 @@ const files = walk('.', 4);
 
 // 1. Existing moment
 const designMd = ['docs/DESIGN.md', 'DESIGN.md', '.agents/context/DESIGN.md'].find(exists);
-const momentJson = ['docs/sense-memory.json', '.agents/context/sense-memory.json'].find(exists);
+const momentJson = ['docs/foldlight.json', '.agents/context/foldlight.json'].find(exists);
 if (momentJson) {
   try {
     const j = JSON.parse(read(momentJson));

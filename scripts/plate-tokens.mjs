@@ -391,7 +391,7 @@ if (process.argv[1] && process.argv[1].endsWith('plate-tokens.mjs')) {
   const line = (k, c, note) => '  ' + pad(k) + ' ' + okl(c) + '; /* ' + note + ' */';
 
   const css = [
-    `/* Sense memory: ${title} */`,
+    `/* Foldlight: ${title} */`,
     `/* fold: ${fold || 'none'} */`,
     `/* plate: ${s.file} provider=${s.provider} */`,
     ':root {',

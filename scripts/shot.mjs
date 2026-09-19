@@ -2,10 +2,10 @@
 // Compile a sensory inventory into an art-direction record (the shot). Pure
 // lookup: the same JSON in gives the same prompt out, no model creativity.
 //
-//   node shot.mjs <sense-memory.json>                      print the shot, write shot.json
-//   node shot.mjs <sense-memory.json> --out docs/shot.json write somewhere else
-//   node shot.mjs <sense-memory.json> --check              fail on a Never token in the prompt
-//   node shot.mjs <sense-memory.json> --json               machine-readable record
+//   node shot.mjs <foldlight.json>                      print the shot, write shot.json
+//   node shot.mjs <foldlight.json> --out docs/shot.json write somewhere else
+//   node shot.mjs <foldlight.json> --check              fail on a Never token in the prompt
+//   node shot.mjs <foldlight.json> --json               machine-readable record
 //
 // The Never list goes only into `negative`. --check tokenizes `never` and reads
 // the positive prompt (which carries inventory.light.fill verbatim), so a prop
@@ -136,7 +136,7 @@ if (process.argv[1] && process.argv[1].endsWith('shot.mjs')) {
     if (!argv[n].startsWith('--')) positional.push(argv[n]);
   }
   const file = positional[0];
-  if (!file) { console.error('usage: shot.mjs <sense-memory.json> [--out shot.json] [--check] [--json]'); process.exit(2); }
+  if (!file) { console.error('usage: shot.mjs <foldlight.json> [--out shot.json] [--check] [--json]'); process.exit(2); }
   const out = argv.includes('--out') ? argv[argv.indexOf('--out') + 1] : 'shot.json';
   let src;
   try { src = JSON.parse(fs.readFileSync(file, 'utf8')); }
