@@ -1,4 +1,6 @@
-evals/results/
 node_modules/
 .dashclaw-local/
 *.log
+docs/tmp/
+.context-handoffs/
+.leg/

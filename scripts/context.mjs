@@ -51,6 +51,18 @@ for (const f of tokenCandidates.slice(0, 12)) {
 }
 out.push(surfaces.length ? 'TOKENS ' + surfaces.join(' ; ') : 'TOKENS none (greenfield: write styles/tokens.css or the framework theme)');
 
+// 2b. The fold the project already committed to, and its plate. One product, one fold.
+let foldKey = null;
+for (const f of tokenCandidates) {
+  const t = read(f);
+  if (!/--(bg|surface|ink|accent|muted)\s*:/.test(t)) continue;
+  const m = /\/\*\s*fold:\s*([a-z0-9-]+)\s*\*\//i.exec(t);
+  if (m) { foldKey = m[1]; break; }
+}
+out.push(foldKey ? `FOLD ${foldKey}` : 'FOLD none');
+const plate = files.find((f) => /(^|\/)(assets|public)\/plate-[^/]*\.png$/i.test(f));
+out.push(plate ? `PLATE ${plate.replace(/^\.\//, '')}` : 'PLATE none');
+
 // 3. Fonts already committed
 const fontHits = new Set();
 for (const f of files.filter((x) => /\.(css|scss|html|tsx|jsx|ts|js)$/i.test(x)).slice(0, 200)) {

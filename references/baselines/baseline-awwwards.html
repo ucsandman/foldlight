@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Baseline: the Awwwards fold</title>
+<meta name="description" content="The other category default: a viewport-scale centered headline, a floating pill nav, a dark scrim and almost no content above the fold.">
+<style>
+  /* Not a sense-memory page. This is the premium template silhouette-lint must keep
+     rejecting: mirror-symmetric, near empty, pinned to the centre axis. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0b0d; color: #f2efe9; font-family: Georgia, "Times New Roman", serif; height: 100vh; overflow: hidden; }
+  .pill { position: absolute; top: 34px; left: 50%; transform: translateX(-50%); display: flex; gap: 26px; border: 1px solid rgba(242,239,233,0.22); border-radius: 999px; padding: 10px 26px; font-family: system-ui, Arial, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(242,239,233,0.72); }
+  .scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,11,13,0) 46%, rgba(11,11,13,0.86) 100%); pointer-events: none; }
+  .fold { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .topscrim { position: absolute; top: 0; left: 0; right: 0; height: 24px; background: #24242c; border-bottom: 1px solid rgba(242,239,233,0.16); }
+  .fold h1 { font-size: 8.4vw; line-height: 0.94; letter-spacing: -0.03em; font-weight: 400; }
+  .fold h1 em { font-style: italic; }
+  .fold p { margin-top: 30px; font-family: system-ui, Arial, sans-serif; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(242,239,233,0.6); }
+  .scroll { position: absolute; bottom: 38px; left: 50%; transform: translateX(-50%); font-family: system-ui, Arial, sans-serif; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(242,239,233,0.5); }
+</style>
+</head>
+<body>
+  <div class="topscrim"></div>
+  <div class="pill"><span>Work</span><span>Studio</span><span>Contact</span></div>
+  <section class="fold">
+    <h1>Beyond the<br><em>ordinary</em></h1>
+    <p>Selected works, 2019 to 2026</p>
+  </section>
+  <div class="scrim"></div>
+  <div class="scroll">Scroll</div>
+</body>
+</html>

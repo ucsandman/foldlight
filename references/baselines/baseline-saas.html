@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Baseline: the SaaS fold</title>
+<meta name="description" content="The category default this skill must not build: a full-width top bar, a centered hero, three equal cards, a footer band.">
+<style>
+  /* Not a sense-memory page. This is the shape silhouette-lint must keep rejecting.
+     No palette roles here on purpose: moment-lint has nothing to say about it. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #ffffff; color: #0f172a; font-family: system-ui, "Segoe UI", Arial, sans-serif; }
+  .bar { height: 64px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; }
+  .bar strong { font-size: 18px; letter-spacing: -0.01em; }
+  .bar nav { display: flex; gap: 32px; font-size: 14px; color: #475569; }
+  .bar .cta { background: #2563eb; color: #fff; font-size: 14px; padding: 9px 18px; border-radius: 6px; }
+  .hero { text-align: center; padding: 88px 24px 56px; }
+  .hero h1 { font-size: 44px; line-height: 1.15; letter-spacing: -0.02em; max-width: 720px; margin: 0 auto 20px; }
+  .hero p { font-size: 17px; color: #475569; max-width: 560px; margin: 0 auto 28px; }
+  .hero .row { display: flex; gap: 12px; justify-content: center; }
+  .hero .row span { font-size: 14px; padding: 11px 22px; border-radius: 6px; }
+  .primary { background: #2563eb; color: #fff; }
+  .ghost { border: 1px solid #cbd5e1; color: #0f172a; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 8px 48px 72px; max-width: 1200px; margin: 0 auto; }
+  .card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 24px; box-shadow: 0 1px 2px rgba(15,23,42,0.06); }
+  .card h2 { font-size: 17px; margin-bottom: 8px; }
+  .card p { font-size: 14px; color: #475569; line-height: 1.5; }
+  .card .num { font-size: 28px; font-weight: 600; margin-bottom: 10px; }
+  footer { border-top: 1px solid #e2e8f0; background: #f8fafc; padding: 26px 48px; display: flex; justify-content: space-between; font-size: 13px; color: #64748b; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <strong>Baseline</strong>
+    <nav><span>Product</span><span>Pricing</span><span>Docs</span><span>Company</span></nav>
+    <span class="cta">Start free</span>
+  </div>
+
+  <section class="hero">
+    <h1>Everything your team needs, in one place</h1>
+    <p>The default landing page. A centered column, two buttons, three cards of equal height, and a footer band under them.</p>
+    <div class="row"><span class="primary">Get started</span><span class="ghost">Book a demo</span></div>
+  </section>
+
+  <section class="cards">
+    <div class="card"><div class="num">01</div><h2>Fast setup</h2><p>Three equal blocks in one row is the shape the detector counts. Every card is the same height and the same width.</p></div>
+    <div class="card"><div class="num">02</div><h2>Built to scale</h2><p>Nothing here is wrong. It is only the same page every generator produces when no document was named.</p></div>
+    <div class="card"><div class="num">03</div><h2>Secure by default</h2><p>The border, the radius and the shadow repeat at an even pitch across the row, which is what cardRepeat reads.</p></div>
+  </section>
+
+  <footer><span>Baseline, category default</span><span>Privacy, Terms, Status</span></footer>
+</body>
+</html>
